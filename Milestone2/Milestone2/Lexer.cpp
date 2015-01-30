@@ -11,6 +11,7 @@ If = Word(Tag::IF, "if"), While = Word(Tag::WHILE, "while"), Let = Word(Tag::LET
 Sin = Word(Tag::SIN, "sin"), Cos = Word(Tag::COS, "cos"), Tan = Word(Tag::TAN, "tan");
 
 class Num;
+char c;
 
 void Lexer::reserve(Word w) {
 	hashtable.insert(std::pair<string, Word>(w.toString(), w)); //lexeme is the actual string, word is the variable type
@@ -41,7 +42,6 @@ Token Lexer::scan() {
 
 	//cout << "[IN LEXER]: ";
 
-	char c;
 	int cur = 0;
 
 	ifstream testfile;
@@ -49,23 +49,23 @@ Token Lexer::scan() {
 
 	if (testfile.is_open()) {
 		while (testfile.get(c)) {
-			//cout << c;
 			cout << "Checking for spaces..\n";
 			if (c == ' ' || c == '\t' || c == '\n') {
 				cout << "Found one\n";
 				continue;
 			}
 			else {
+				cout << "None\n";
 				break;
 			}
 		}
 			//letters += c;
+		//cout << c;
 		
-		
-		while (testfile.get(c)) {
+		while (true) {
 			cout << "Checking for operators..\n";
 			if (isalpha(c) || isdigit(c) || c == ' ' || c == '\t' || c == '\n') {
-				//cout << c;
+				cout << "None\n";
 				break;
 			}
 			else {
@@ -103,6 +103,8 @@ Token Lexer::scan() {
 				case ':':
 					return Tag::ASSIGN;
 				}
+				cout << "Get here";
+				testfile.get(c);
 			}
 		}
 
@@ -110,14 +112,16 @@ Token Lexer::scan() {
 
 		//numbers		
 		//while (testfile.get(c)) {
+		//cout << c;
 			cout << "Checking for numbers..\n";
 			if (isdigit(c)) {
-
+				cout << "Found one\n";
 				cout << c;
 
 				int v = 0;
 				do {
 					v = 10 * c;
+					testfile.get(c);
 				} while (isdigit(c));
 				if (c != '.') {
 					return Tag::INT;
@@ -134,7 +138,7 @@ Token Lexer::scan() {
 
 		//letters
 		if (isalpha(c)) {
-			cout << "Checking for letters..\n";
+			cout << "Checking for words..\n";
 			string b;
 				//Word it;
 			do {
@@ -150,8 +154,7 @@ Token Lexer::scan() {
 				hashtable.insert(std::pair<string, Word>(it.toString(), it));
 				return it;
 				*/
-			cout << b;
-			cout << "Alpha ";
+			cout << b << "\n";
 		}
 		//cout << "Got out";
 	}
@@ -160,6 +163,7 @@ Token Lexer::scan() {
 
 void Lexer::print_map() {
 	int size = hashtable.size();
+	//std::ofstream out("out.txt");
 
 	cout << "\nPrinting Table:\n";
 

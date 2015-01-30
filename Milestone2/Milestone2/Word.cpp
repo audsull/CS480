@@ -5,7 +5,6 @@ Word::Word() {
 }
 Word::Word(int t, string s)
 {
-	//tag = t;
 	token = t;
 	lexeme = s;
 
