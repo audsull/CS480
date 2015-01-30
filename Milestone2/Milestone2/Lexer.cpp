@@ -22,11 +22,15 @@ Lexer::Lexer()
 	reserve(While);
 	reserve(Let);
 
+
 	//reserve(Word::TRUE);
 }
 Token Lexer::scan() {
-	std::string keywords;
-	std::string letters;
+
+	cout << "[IN LEXER]: ";
+
+	string keywords;
+	string letters;
 	char c;
 	int size = 0;
 	int cur = 0;
@@ -40,7 +44,8 @@ Token Lexer::scan() {
 				letters.clear();
 				continue;
 			}
-			//letters += c;
+
+			letters += c;
 
 			//ops
 			switch (c) {
@@ -49,6 +54,7 @@ Token Lexer::scan() {
 			case '|':
 				return Tag::OR;
 			case '=':
+				//cout << "EQUALSIGN!!!";
 				return Tag::EQUAL;
 			case '!':
 				return Tag::NOT;
@@ -62,15 +68,33 @@ Token Lexer::scan() {
 			//if c is a digit
 			if (isdigit(c)) {
 				int v = 0;
-
+				do {
+					v = 10 * c;
+				} while (isdigit(c));
+				//cout << "Digit";
 			}
 			//if c is a letter
 			if (isalpha(c)) {
 				string b;
-				b += c;
+				Word it;
+				do {
+					b += c;
+				} while (isalpha(c) || isdigit(c));
+
+				//it = hashtable.find(b);
+				if (1) {
+					return it;
+				}
+				it = Word(Tag::ID, b);
+				hashtable.insert(std::pair<string, Word>(it.toString(), it));
+				return it;
+				cout << b;
+
+
+				//cout << "Alpha";
 			}
 		}
-		cout << letters;
+		//cout << letters;
 
 	}
 
