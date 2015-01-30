@@ -16,6 +16,7 @@ int main() {
 	Lexer lex;
 	lex.scan();
 
+	lex.print_map();
 	/*
 	string keywords;
 	string letters;

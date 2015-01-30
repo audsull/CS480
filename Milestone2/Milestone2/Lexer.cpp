@@ -10,7 +10,7 @@ Ne = Word(Tag::NE, "!="), Stdout = Word(Tag::STDOUT, "stdout"),
 If = Word(Tag::IF, "if"), While = Word(Tag::WHILE, "while"), Let = Word(Tag::LET, "let"), Assign = Word(Tag::ASSIGN, ":="),
 Sin = Word(Tag::SIN, "sin"), Cos = Word(Tag::COS, "cos"), Tan = Word(Tag::TAN, "tan");
 
-
+class Num;
 
 void Lexer::reserve(Word w) {
 	hashtable.insert(std::pair<string, Word>(w.toString(), w)); //lexeme is the actual string, word is the variable type
@@ -18,21 +18,30 @@ void Lexer::reserve(Word w) {
 }
 Lexer::Lexer()
 {
+	//reserved keywords
 	reserve(If);
 	reserve(While);
 	reserve(Let);
+	//reserve(Assign);
+	reserve(Sin);
+	reserve(Cos);
+	reserve(Tan);
+	reserve(True);
+	reserve(False);
+	reserve(Bool);
+	reserve(Int);
+	reserve(Real);
+	reserve(String);
+	reserve(Stdout);
 
 
 	//reserve(Word::TRUE);
 }
 Token Lexer::scan() {
 
-	cout << "[IN LEXER]: ";
+	//cout << "[IN LEXER]: ";
 
-	string keywords;
-	string letters;
 	char c;
-	int size = 0;
 	int cur = 0;
 
 	ifstream testfile;
@@ -40,65 +49,124 @@ Token Lexer::scan() {
 
 	if (testfile.is_open()) {
 		while (testfile.get(c)) {
+			//cout << c;
+			cout << "Checking for spaces..\n";
 			if (c == ' ' || c == '\t' || c == '\n') {
-				letters.clear();
+				cout << "Found one\n";
 				continue;
 			}
-
-			letters += c;
-
-			//ops
-			switch (c) {
-			case '&':
-				return Tag::AND;
-			case '|':
-				return Tag::OR;
-			case '=':
-				//cout << "EQUALSIGN!!!";
-				return Tag::EQUAL;
-			case '!':
-				return Tag::NOT;
-			case '<':
-				return Tag::LT;
-			case '>':
-				return Tag::GT;
-			case ':=':
-				return Tag::ASSIGN;
+			else {
+				break;
 			}
-			//if c is a digit
+		}
+			//letters += c;
+		
+		
+		while (testfile.get(c)) {
+			cout << "Checking for operators..\n";
+			if (isalpha(c) || isdigit(c) || c == ' ' || c == '\t' || c == '\n') {
+				//cout << c;
+				break;
+			}
+			else {
+				printf("Found one!\n");
+				
+				//operators
+				switch (c) {
+				case '&':
+					return Tag::AND;
+				case '|':
+					return Tag::OR;
+				case '+':
+					return Tag::PLUS;
+				case '-':
+					return Tag::MINUS;
+				case '*':
+					reserve(Mult);
+					return Tag::MULT;
+				case '/':
+					return Tag::DIV;
+				case '^':
+					//cout << "Pow";
+					return Tag::POW;
+				case '%':
+					return Tag::MOD;
+				case '=':
+					//cout << "Equal ";
+					return Tag::EQUAL;
+				case '!':
+					return Tag::NOT;
+				case '<':
+					return Tag::LT;
+				case '>':
+					return Tag::GT;
+				case ':':
+					return Tag::ASSIGN;
+				}
+			}
+		}
+
+		
+
+		//numbers		
+		//while (testfile.get(c)) {
+			cout << "Checking for numbers..\n";
 			if (isdigit(c)) {
+
+				cout << c;
+
 				int v = 0;
 				do {
 					v = 10 * c;
 				} while (isdigit(c));
-				//cout << "Digit";
+				if (c != '.') {
+					return Tag::INT;
+				}
+				
+				cout << v;
 			}
-			//if c is a letter
-			if (isalpha(c)) {
-				string b;
-				Word it;
-				do {
-					b += c;
-				} while (isalpha(c) || isdigit(c));
+			else {
+				//break;
+			}
+		//}
+		
 
+
+		//letters
+		if (isalpha(c)) {
+			cout << "Checking for letters..\n";
+			string b;
+				//Word it;
+			do {
+				b += c;
+				testfile.get(c);
+			} while (isalpha(c) || isdigit(c));
+				/*
 				//it = hashtable.find(b);
 				if (1) {
-					return it;
+				return it;
 				}
 				it = Word(Tag::ID, b);
 				hashtable.insert(std::pair<string, Word>(it.toString(), it));
 				return it;
-				cout << b;
-
-
-				//cout << "Alpha";
-			}
+				*/
+			cout << b;
+			cout << "Alpha ";
 		}
-		//cout << letters;
-
+		//cout << "Got out";
 	}
-
 	testfile.close();
+}
+
+void Lexer::print_map() {
+	int size = hashtable.size();
+
+	cout << "\nPrinting Table:\n";
+
+	for (std::map<string, Word>::const_iterator it = hashtable.begin(); 
+		it != hashtable.end(); ++it) {
+		cout << "<" << it->first << ", " << it->second.lexeme << ", " << it->second.token << ">\n";
+	}
 }
 
 Lexer::~Lexer()

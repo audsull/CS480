@@ -23,6 +23,9 @@ public:
 	void reserve(Word);
 	Lexer();
 	Token scan();
+	
+	//Print hashmap to file!
+	void print_map();
 
 	~Lexer();
 };
