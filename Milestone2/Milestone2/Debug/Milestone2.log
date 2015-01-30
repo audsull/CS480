@@ -1,0 +1,20 @@
+﻿Build started 1/29/2015 4:22:32 PM.
+     1>Project "C:\Users\Audrey\Documents\Visual Studio 2013\Projects\Milestone2\Milestone2\Milestone2.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Lexer.cpp Num.cpp Real.cpp Tag.cpp Word.cpp main.cpp
+         Word.cpp
+     1>c:\users\audrey\documents\visual studio 2013\projects\milestone2\milestone2\lexer.h(12): error C2065: 'Word' : undeclared identifier
+     1>c:\users\audrey\documents\visual studio 2013\projects\milestone2\milestone2\lexer.h(12): error C2923: 'std::map' : 'Word' is not a valid template type argument for parameter '_Ty'
+     1>c:\users\audrey\documents\visual studio 2013\projects\milestone2\milestone2\lexer.h(13): error C2061: syntax error : identifier 'Word'
+         Real.cpp
+         Num.cpp
+         Generating Code...
+         Skipping... (no relevant changes detected)
+         main.cpp
+         Tag.cpp
+         Lexer.cpp
+     1>Done Building Project "C:\Users\Audrey\Documents\Visual Studio 2013\Projects\Milestone2\Milestone2\Milestone2.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:01.02
