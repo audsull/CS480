@@ -9,9 +9,9 @@ public:
 	int line = 1;
 	char peek = ' ';
 	//Store in hashtable as lexeme, valueS
-	std::map<string, Word> hashtable;
-	void reserve(Word);
-	Lexer();
+	//std::map<string, Word> hashtable;
+	//void reserve(Word);
+	//Lexer();
 	Token scan();
 
 	~Lexer();

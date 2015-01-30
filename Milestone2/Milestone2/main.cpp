@@ -13,17 +13,14 @@ using namespace std;
 
 int main() {
 
-	//Lexer lex;
-	//Parser parse;
-
-	std::string keywords;
-	std::string letters;
+	string keywords;
+	string letters;
 	char c;
 	int size = 0;
 	int cur = 0;
 
 	ifstream testfile;
-	testfile.open("test.txt");
+	testfile.open("testfile.txt");
 	printf("Opened the file.\n");
 
 	if (testfile.is_open()) {

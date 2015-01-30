@@ -1,6 +1,6 @@
 #include "Lexer.h"
 
-void Lexer::reserve(Word w) {
+/*void Lexer::reserve(Word w) {
 	hashtable.insert(std::pair<string, Word>(w.lexeme, w));
 	return;
 }
@@ -11,7 +11,7 @@ Lexer::Lexer()
 	reserve(Word(Tag::LET, "let"));
 
 	//reserve(Word::TRUE);
-}
+}*/
 /*Token Lexer::scan() {
 	std::string keywords;
 	std::string letters;
