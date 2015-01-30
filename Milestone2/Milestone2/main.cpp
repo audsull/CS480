@@ -7,11 +7,13 @@
 #include "Token.h"
 #include "Word.h"
 #include "Num.h"
-//#include "Lexer.h"
+#include "Lexer.h"
 
 using namespace std;
 
 int main() {
+
+	Lexer lex;
 
 	string keywords;
 	string letters;
@@ -42,14 +44,14 @@ int main() {
 	testfile.close();
 	
 	static Word Bool = Word(Tag::BOOL, "bool"), True = Word(Tag::TRUE, "true"), False = Word(Tag::FALSE, "false"),
-		and = Word(Tag::AND, "&&"), or = Word(Tag::OR, "||"), not = Word(Tag::NOT, "!"),
-		Int = Word(Tag::INT, "int"), real = Word(Tag::REAL, "real"), string = Word(Tag::STRING, "string"),
-		plus = Word(Tag::PLUS, "+"), minus = Word(Tag::MINUS, "-"), mult = Word(Tag::MULT, "*"), div = Word(Tag::DIV, "/"),
-		mod = Word(Tag::MOD, "%"), pow = Word(Tag::POW, "^"), equal = Word(Tag::EQUAL, "="),
-		lt = Word(Tag::LT, "<"), gt = Word(Tag::GT, ">"), le = Word(Tag::LE, "<="), ge = Word(Tag::GE, ">="),
-		ne = Word(Tag::NE, "!="), Stdout = Word(Tag::STDOUT, "stdout"),
-		If = Word(Tag::IF, "if"), While = Word(Tag::WHILE, "while"), Let = Word(Tag::LET, "let"), assign = Word(Tag::ASSIGN, ":="),
-		sin = Word(Tag::SIN, "sin"), cos = Word(Tag::COS, "cos"), tan = Word(Tag::TAN, "tan");
+		And = Word(Tag::AND, "&&"), Or = Word(Tag::OR, "||"), Not = Word(Tag::NOT, "!"),
+		Int = Word(Tag::INT, "int"), Real = Word(Tag::REAL, "real"), String = Word(Tag::STRING, "string"),
+		Plus = Word(Tag::PLUS, "+"), minus = Word(Tag::MINUS, "-"), mult = Word(Tag::MULT, "*"), div = Word(Tag::DIV, "/"),
+		Mod = Word(Tag::MOD, "%"), Pow = Word(Tag::POW, "^"), Equal = Word(Tag::EQUAL, "="),
+		Lt = Word(Tag::LT, "<"), Gt = Word(Tag::GT, ">"), Le = Word(Tag::LE, "<="), Ge = Word(Tag::GE, ">="),
+		Ne = Word(Tag::NE, "!="), Stdout = Word(Tag::STDOUT, "stdout"),
+		If = Word(Tag::IF, "if"), While = Word(Tag::WHILE, "while"), Let = Word(Tag::LET, "let"), Assign = Word(Tag::ASSIGN, ":="),
+		Sin = Word(Tag::SIN, "sin"), Cos = Word(Tag::COS, "cos"), Tan = Word(Tag::TAN, "tan");
 
 
 	getchar();
