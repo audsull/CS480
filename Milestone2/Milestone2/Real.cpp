@@ -10,7 +10,7 @@ Real::Real(float v)
 	value = v;
 }
 string Real::toString() {
-	return "";
+	return to_string(value);
 }
 
 Real::~Real()
