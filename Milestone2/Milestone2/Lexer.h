@@ -1,5 +1,7 @@
 #pragma once
 #include "Word.h"
+//#include "Word.cpp"
+
 #include <cstdio>
 #include <iostream>
 #include <fstream>
@@ -7,8 +9,11 @@
 #include <vector>
 #include <map>
 
+class Word;
+
 class Lexer
 {
+
 public:
 	int line = 1;
 	char peek = ' ';

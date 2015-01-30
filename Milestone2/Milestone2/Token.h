@@ -8,6 +8,7 @@ class Token
 {
 public:
 	int tag;
+
 	Token();
 	Token(int);
 	string toString();

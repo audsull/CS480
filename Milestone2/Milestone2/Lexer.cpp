@@ -1,18 +1,30 @@
 #include "Lexer.h"
 
+static Word Bool = Word(Tag::BOOL, "bool"), True = Word(Tag::TRUE, "true"), False = Word(Tag::FALSE, "false"),
+And = Word(Tag::AND, "&&"), Or = Word(Tag::OR, "||"), Not = Word(Tag::NOT, "!"),
+Int = Word(Tag::INT, "int"), Real = Word(Tag::REAL, "real"), String = Word(Tag::STRING, "string"),
+Plus = Word(Tag::PLUS, "+"), Minus = Word(Tag::MINUS, "-"), Mult = Word(Tag::MULT, "*"), Div = Word(Tag::DIV, "/"),
+Mod = Word(Tag::MOD, "%"), Pow = Word(Tag::POW, "^"), Equal = Word(Tag::EQUAL, "="),
+Lt = Word(Tag::LT, "<"), Gt = Word(Tag::GT, ">"), Le = Word(Tag::LE, "<="), Ge = Word(Tag::GE, ">="),
+Ne = Word(Tag::NE, "!="), Stdout = Word(Tag::STDOUT, "stdout"),
+If = Word(Tag::IF, "if"), While = Word(Tag::WHILE, "while"), Let = Word(Tag::LET, "let"), Assign = Word(Tag::ASSIGN, ":="),
+Sin = Word(Tag::SIN, "sin"), Cos = Word(Tag::COS, "cos"), Tan = Word(Tag::TAN, "tan");
+
+
+
 void Lexer::reserve(Word w) {
-	hashtable.insert(std::pair<string, Word>(w.lexeme, w));
-	return;
+	hashtable.insert(std::pair<string, Word>(w.toString(), w)); //lexeme is the actual string, word is the variable type
+	 return;
 }
 Lexer::Lexer()
 {
-	//reserve(Word(Tag::IF,"if"));
-	//reserve(Word(Tag::WHILE, "while"));
-	//reserve(Word(Tag::LET, "let"));
+	reserve(If);
+	reserve(While);
+	reserve(Let);
 
 	//reserve(Word::TRUE);
 }
-/*Token Lexer::scan() {
+Token Lexer::scan() {
 	std::string keywords;
 	std::string letters;
 	char c;
@@ -20,7 +32,7 @@ Lexer::Lexer()
 	int cur = 0;
 
 	ifstream testfile;
-	testfile.open("test.txt");
+	testfile.open("testfile.txt");
 
 	if (testfile.is_open()) {
 		while (testfile.get(c)) {
@@ -33,26 +45,19 @@ Lexer::Lexer()
 			//ops
 			switch (c) {
 			case '&':
-				return and;
-				//return And;
+				return Tag::AND;
 			case '|':
-				return;
-				//return Or;
+				return Tag::OR;
 			case '=':
-				return;
-				//return Equal;
+				return Tag::EQUAL;
 			case '!':
-				return;
-				//return Not;
+				return Tag::NOT;
 			case '<':
-				return;
-				//return Lt;
+				return Tag::LT;
 			case '>':
-				return;
-				//return Gt;
+				return Tag::GT;
 			case ':=':
-				//return Assign;
-				return;
+				return Tag::ASSIGN;
 			}
 			//if c is a digit
 			if (isdigit(c)) {
@@ -71,7 +76,7 @@ Lexer::Lexer()
 
 	testfile.close();
 }
-*/
+
 Lexer::~Lexer()
 {
 }

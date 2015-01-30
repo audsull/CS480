@@ -1,15 +1,9 @@
-﻿Build started 1/29/2015 5:25:44 PM.
+﻿Build started 1/29/2015 7:12:15 PM.
      1>Project "C:\Users\Audrey\Documents\GitHub\CS480\Milestone2\Milestone2\Milestone2.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Lexer.cpp Num.cpp Real.cpp Tag.cpp Word.cpp main.cpp
-         main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Lexer.cpp
          Lexer.cpp
-         Generating Code...
-         Skipping... (no relevant changes detected)
-         Word.cpp
-         Tag.cpp
-         Real.cpp
-         Num.cpp
+     1>c:\users\audrey\documents\github\cs480\milestone2\milestone2\lexer.cpp(78): warning C4715: 'Lexer::scan' : not all control paths return a value
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Audrey\Documents\GitHub\CS480\Milestone2\Debug\Milestone2.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Audrey\Documents\GitHub\CS480\Milestone2\Debug\Milestone2.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Audrey\Documents\GitHub\CS480\Milestone2\Debug\Milestone2.lib" /MACHINE:X86 Debug\Lexer.obj
          Debug\main.obj
@@ -23,4 +17,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.25
+Time Elapsed 00:00:00.76

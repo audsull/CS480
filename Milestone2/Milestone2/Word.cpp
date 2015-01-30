@@ -6,8 +6,10 @@ Word::Word() {
 Word::Word(int t, string s)
 {
 	//tag = t;
-	Token::Token(t);
+	token = t;
 	lexeme = s;
+
+	Token::Token(token);
 }
 string Word::toString() {
 	return lexeme;
