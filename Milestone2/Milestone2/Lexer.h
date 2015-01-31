@@ -18,11 +18,14 @@ class Lexer
 public:
 	int line = 1;
 	char peek = ' ';
+	char c;
 	//Store in hashtable as lexeme, valueS
 	std::map<string, Word> hashtable;
 	void reserve(Word);
 	Lexer();
-	Token scan();
+	Token scan(int&);
+	//void readch();
+	//bool reachch(char);
 	
 	//Print hashmap to file!
 	void print_map();

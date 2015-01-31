@@ -11,12 +11,14 @@ If = Word(Tag::IF, "if"), While = Word(Tag::WHILE, "while"), Let = Word(Tag::LET
 Sin = Word(Tag::SIN, "sin"), Cos = Word(Tag::COS, "cos"), Tan = Word(Tag::TAN, "tan");
 
 class Num;
-char c;
+//char c;
 
 void Lexer::reserve(Word w) {
 	hashtable.insert(std::pair<string, Word>(w.toString(), w)); //lexeme is the actual string, word is the variable type
 	 return;
 }
+
+
 Lexer::Lexer()
 {
 	//reserved keywords
@@ -38,20 +40,22 @@ Lexer::Lexer()
 
 	//reserve(Word::TRUE);
 }
-Token Lexer::scan() {
-
+Token Lexer::scan(int &offset) {
+	//char c = input.get();
 	//cout << "[IN LEXER]: ";
-
 	int cur = 0;
 
 	ifstream testfile;
 	testfile.open("testfile.txt");
 
+	testfile.seekg(offset);
+
 	if (testfile.is_open()) {
 		while (testfile.get(c)) {
-			cout << "Checking for spaces..\n";
+			offset++;
+			std::cout << "Checking for spaces..\n";
 			if (c == ' ' || c == '\t' || c == '\n') {
-				cout << "Found one\n";
+				std::cout << "Found one\n";
 				continue;
 			}
 			else {
@@ -63,7 +67,7 @@ Token Lexer::scan() {
 		//cout << c;
 		
 		while (true) {
-			cout << "Checking for operators..\n";
+			std::cout << "Checking for operators..\n";
 			if (isalpha(c) || isdigit(c) || c == ' ' || c == '\t' || c == '\n') {
 				//cout << "None\n";
 				break;
@@ -103,8 +107,9 @@ Token Lexer::scan() {
 				case ':':
 					return Tag::ASSIGN;
 				}
-				cout << "Get here";
+				//cout << "Get here";
 				testfile.get(c);
+				offset++;
 			}
 		}
 
@@ -113,21 +118,22 @@ Token Lexer::scan() {
 		//numbers		
 		//while (testfile.get(c)) {
 		//cout << c;
-			cout << "Checking for numbers..\n";
+			std::cout << "Checking for numbers..\n";
 			if (isdigit(c)) {
-				cout << "Found one\n";
-				cout << c;
+				//cout << "Found one\n";
+				//cout << c;
 
 				int v = 0;
 				do {
 					v = 10 * c;
 					testfile.get(c);
+					offset++;
 				} while (isdigit(c));
 				if (c != '.') {
 					return Tag::INT;
 				}
 				
-				cout << v;
+				//cout << v;
 			}
 			else {
 				//break;
@@ -138,12 +144,13 @@ Token Lexer::scan() {
 
 		//letters
 		if (isalpha(c)) {
-			cout << "Checking for words..\n";
+			std::cout << "Checking for words..\n";
 			string b;
 				//Word it;
 			do {
 				b += c;
 				testfile.get(c);
+				offset++;
 			} while (isalpha(c) || isdigit(c));
 				/*
 				//it = hashtable.find(b);
@@ -154,14 +161,14 @@ Token Lexer::scan() {
 				hashtable.insert(std::pair<string, Word>(it.toString(), it));
 				return it;
 				*/
-			cout << b << "\n";
+			//cout << b << "\n";
 			return Tag::ID;
 		}
-		//cout << "Got out";
+		std::cout << "Got out";
 	}
 	testfile.close();
 
-	cout << "Reached EOF\n";
+	//cout << "Reached EOF\n";
 	return Tag::END;
 }
 
@@ -169,7 +176,7 @@ void Lexer::print_map() {
 	int size = hashtable.size();
 	//std::ofstream out("out.txt");
 
-	cout << "\nPrinting Table:\n";
+	std::cout << "\nPrinting Table:\n";
 
 	for (std::map<string, Word>::const_iterator it = hashtable.begin(); 
 		it != hashtable.end(); ++it) {

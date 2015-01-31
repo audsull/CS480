@@ -14,26 +14,23 @@ class Token;
 
 int main() {
 	//char c;
+	int offset = 0;
 	Lexer lex;
 
 	int size = 0;
 	Token tokens[100];
 
-	tokens[size] = lex.scan();
+	tokens[size] = lex.scan(offset);
 	cout << tokens[size].tag;
+	cout << offset;
 	size++;
 
-	tokens[size] = lex.scan();
-	cout << tokens[size].tag;
-
-
-	/*
 	while (tokens[size].tag != (Tag::END)) {
-		tokens[size] = lex.scan();
+		tokens[size] = lex.scan(offset);
 		cout << tokens[size].tag;
 		size++;
 	}
-	*/
+
 	//lex.print_map();
 	
 	getchar();
