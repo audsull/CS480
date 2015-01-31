@@ -1,1 +1,1 @@
-*^ 9 = if while 1.0 int = real
+* if while 1.0 int = real

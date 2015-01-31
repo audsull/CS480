@@ -26,7 +26,7 @@ public:
 	
 	//Print hashmap to file!
 	void print_map();
-
+	void print_tokens();
 	~Lexer();
 };
 

@@ -55,7 +55,7 @@ Token Lexer::scan() {
 				continue;
 			}
 			else {
-				cout << "None\n";
+				//cout << "None\n";
 				break;
 			}
 		}
@@ -65,7 +65,7 @@ Token Lexer::scan() {
 		while (true) {
 			cout << "Checking for operators..\n";
 			if (isalpha(c) || isdigit(c) || c == ' ' || c == '\t' || c == '\n') {
-				cout << "None\n";
+				//cout << "None\n";
 				break;
 			}
 			else {
@@ -155,10 +155,14 @@ Token Lexer::scan() {
 				return it;
 				*/
 			cout << b << "\n";
+			return Tag::ID;
 		}
 		//cout << "Got out";
 	}
 	testfile.close();
+
+	cout << "Reached EOF\n";
+	return Tag::END;
 }
 
 void Lexer::print_map() {
@@ -171,6 +175,10 @@ void Lexer::print_map() {
 		it != hashtable.end(); ++it) {
 		cout << "<" << it->first << ", " << it->second.lexeme << ", " << it->second.token << ">\n";
 	}
+}
+
+void Lexer::print_tokens() {
+
 }
 
 Lexer::~Lexer()
