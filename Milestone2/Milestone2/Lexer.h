@@ -1,5 +1,7 @@
 #pragma once
 #include "Word.h"
+#include "Num.h"
+#include "Real.h"
 //#include "Word.cpp"
 
 #include <cstdio>
@@ -21,6 +23,7 @@ public:
 	char c;
 	//Store in hashtable as lexeme, valueS
 	std::map<string, Word> hashtable;
+	std::map<int, string> valuemap;
 	void reserve(Word);
 	Lexer();
 	Token scan(int&);

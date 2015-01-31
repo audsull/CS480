@@ -9,7 +9,12 @@ Num::Num(int v)
 	value = v;
 }
 string Num::toString() {
-	return "" + value;
+	//return "" + value;
+	string result;
+	ostringstream convert;
+	convert << value;
+	result = convert.str();
+	return result;
 }
 
 Num::~Num()

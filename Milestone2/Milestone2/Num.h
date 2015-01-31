@@ -1,4 +1,5 @@
 #pragma once
+#include <sstream>
 #include "Token.h"
 #include "Tag.h"
 class Num :

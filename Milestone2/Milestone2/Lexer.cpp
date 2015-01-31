@@ -11,14 +11,15 @@ If = Word(Tag::IF, "if"), While = Word(Tag::WHILE, "while"), Let = Word(Tag::LET
 Sin = Word(Tag::SIN, "sin"), Cos = Word(Tag::COS, "cos"), Tan = Word(Tag::TAN, "tan");
 
 class Num;
-//char c;
+class Word;
+class Real;
+
+
 
 void Lexer::reserve(Word w) {
 	hashtable.insert(std::pair<string, Word>(w.toString(), w)); //lexeme is the actual string, word is the variable type
 	 return;
 }
-
-
 Lexer::Lexer()
 {
 	//reserved keywords
@@ -36,22 +37,16 @@ Lexer::Lexer()
 	reserve(Real);
 	reserve(String);
 	reserve(Stdout);
-
-
-	//reserve(Word::TRUE);
 }
 Token Lexer::scan(int &offset) {
 	int cur = 0;
-
 	ifstream testfile;
 	testfile.open("testfile.txt");
-
 	testfile.seekg(offset);
 
 	if (testfile.is_open()) {
 		while (testfile.get(c)) {
 			offset++;
-			std::cout << "Checking for spaces..\n";
 			if (c == ' ' || c == '\t' || c == '\n') {
 				continue;
 			}
@@ -61,14 +56,22 @@ Token Lexer::scan(int &offset) {
 		}
 		
 		while (true) {
-			std::cout << "Checking for operators..\n";
 			if (isalpha(c) || isdigit(c) || c == ' ' || c == '\t' || c == '\n') {
 				break;
 			}
-			else {				
-				//operators
+			else {		
+				stringstream ss;
+				string s;
+				ss << c;
+				ss >> s;
+
+				cout << c << " ";
+
 				switch (c) {
 				case '&':
+					And.lexeme = c;
+					//return And;
+					
 					return Tag::AND;
 				case '|':
 					return Tag::OR;
@@ -77,12 +80,14 @@ Token Lexer::scan(int &offset) {
 				case '-':
 					return Tag::MINUS;
 				case '*':
-					reserve(Mult);
+					//reserve(Mult);
+					//return Mult;
+					//std::cout << s << "\n";
+					//return Word(Tag::MULT, s);
 					return Tag::MULT;
 				case '/':
 					return Tag::DIV;
 				case '^':
-					//cout << "Pow";
 					return Tag::POW;
 				case '%':
 					return Tag::MOD;
@@ -96,7 +101,10 @@ Token Lexer::scan(int &offset) {
 				case '>':
 					return Tag::GT;
 				case ':':
-					return Tag::ASSIGN;
+					if (testfile.peek() == '=') {
+						testfile.get(c);
+						return Tag::ASSIGN;
+					}
 				}
 				testfile.get(c);
 				offset++;
@@ -104,35 +112,44 @@ Token Lexer::scan(int &offset) {
 		}
 
 		//numbers		
-			std::cout << "Checking for numbers..\n";
 			if (isdigit(c)) {
 				int v = 0;
 				do {
-					v = 10 * c;
+					v = 10 * v + (char)c;
 					testfile.get(c);
 					offset++;
 				} while (isdigit(c));
 				if (c != '.') {
-					//return Tag::INT;
-					std::cout << "Int alert\n";
+					//return Num(v);
+					cout << v << " ";
+					return Tag::INTTYPE;
 				}
-				else {
-					std::cout << "Float alert\n";
+				float x = (float)v;
+				float d = 10;
+				for (;;) {
+					testfile.get(c);
+					if (!isdigit(c)) break;
+					x = x + (int)c / d;
+					d = d * 10;
 				}
+				//return Real(x);
+				cout << x << ' ';
+				return Tag::REALTYPE;
 			}
-			else {
-				//break;
-				
-			}
-		//}
-		
 
+			//string
+			if (c == '\"') {
+				cout << "String? ";
+				while (testfile.peek() != '\"') {
+					testfile.get(c);
+				}
+				return Tag::STRING;
+			}
 
 		//letters
 		if (isalpha(c)) {
-			std::cout << "Checking for words..\n";
 			string b;
-				Word lookup;
+			Word w;
 			do {
 				b += c;
 				testfile.get(c);
@@ -146,9 +163,13 @@ Token Lexer::scan(int &offset) {
 				//lookup = Word(Tag::ID, b);
 				//hashtable.insert(std::pair<string, Word>(lookup.toString(), lookup));
 				//return lookup;
-
+			cout << b << " ";
 
 			if (b.compare("and") == 0) {
+				w = Word(Tag::AND, b);
+				hashtable.insert(std::pair<string, Word>(b, w));
+				//valuemap.insert(pair<Tag::AND, b>);
+				
 				return Tag::AND;
 			}
 			if (b.compare("or") == 0) {
@@ -196,8 +217,6 @@ Token Lexer::scan(int &offset) {
 			if (b.compare("stdout") == 0) {
 				return Tag::STDOUT;
 			}
-				//cout << b << "\n";
-
 			else { 
 				return Tag::ID;
 			}
@@ -205,9 +224,9 @@ Token Lexer::scan(int &offset) {
 	}
 	testfile.close();
 
-	//cout << "Reached EOF\n";
-	if (testfile.peek() < 0) {
 
+	if (testfile.peek() < 0) {
+	//cout << "Reached EOF\n";		
 		return Tag::END;
 	}
 
@@ -215,8 +234,6 @@ Token Lexer::scan(int &offset) {
 
 void Lexer::print_map() {
 	int size = hashtable.size();
-	//std::ofstream out("out.txt");
-
 	std::cout << "\nPrinting Table:\n";
 
 	for (std::map<string, Word>::const_iterator it = hashtable.begin(); 

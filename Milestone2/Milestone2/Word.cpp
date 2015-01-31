@@ -18,3 +18,11 @@ Word::~Word()
 {
 }
 
+string Word::get_lexeme(Token t) {
+	return lexeme;
+}
+
+void print_word(Word w) {
+	cout << w.lexeme << "\n";
+	cout << w.tag << "\n";
+}
