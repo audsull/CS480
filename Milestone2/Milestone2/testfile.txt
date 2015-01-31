@@ -1,1 +1,1 @@
-* if while 1.0 int = real
+* and if while 1.0 int = real

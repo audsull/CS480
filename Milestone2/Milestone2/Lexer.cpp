@@ -41,8 +41,6 @@ Lexer::Lexer()
 	//reserve(Word::TRUE);
 }
 Token Lexer::scan(int &offset) {
-	//char c = input.get();
-	//cout << "[IN LEXER]: ";
 	int cur = 0;
 
 	ifstream testfile;
@@ -55,26 +53,19 @@ Token Lexer::scan(int &offset) {
 			offset++;
 			std::cout << "Checking for spaces..\n";
 			if (c == ' ' || c == '\t' || c == '\n') {
-				std::cout << "Found one\n";
 				continue;
 			}
 			else {
-				//cout << "None\n";
 				break;
 			}
 		}
-			//letters += c;
-		//cout << c;
 		
 		while (true) {
 			std::cout << "Checking for operators..\n";
 			if (isalpha(c) || isdigit(c) || c == ' ' || c == '\t' || c == '\n') {
-				//cout << "None\n";
 				break;
 			}
-			else {
-				printf("Found one!\n");
-				
+			else {				
 				//operators
 				switch (c) {
 				case '&':
@@ -107,22 +98,14 @@ Token Lexer::scan(int &offset) {
 				case ':':
 					return Tag::ASSIGN;
 				}
-				//cout << "Get here";
 				testfile.get(c);
 				offset++;
 			}
 		}
 
-		
-
 		//numbers		
-		//while (testfile.get(c)) {
-		//cout << c;
 			std::cout << "Checking for numbers..\n";
 			if (isdigit(c)) {
-				//cout << "Found one\n";
-				//cout << c;
-
 				int v = 0;
 				do {
 					v = 10 * c;
@@ -130,13 +113,16 @@ Token Lexer::scan(int &offset) {
 					offset++;
 				} while (isdigit(c));
 				if (c != '.') {
-					return Tag::INT;
+					//return Tag::INT;
+					std::cout << "Int alert\n";
 				}
-				
-				//cout << v;
+				else {
+					std::cout << "Float alert\n";
+				}
 			}
 			else {
 				//break;
+				
 			}
 		//}
 		
@@ -146,30 +132,85 @@ Token Lexer::scan(int &offset) {
 		if (isalpha(c)) {
 			std::cout << "Checking for words..\n";
 			string b;
-				//Word it;
+				Word lookup;
 			do {
 				b += c;
 				testfile.get(c);
 				offset++;
 			} while (isalpha(c) || isdigit(c));
-				/*
-				//it = hashtable.find(b);
-				if (1) {
-				return it;
-				}
-				it = Word(Tag::ID, b);
-				hashtable.insert(std::pair<string, Word>(it.toString(), it));
-				return it;
-				*/
-			//cout << b << "\n";
-			return Tag::ID;
+				//lookup = hashtable.find(b);
+				
+				//if (1) {
+					//return lookup;
+				//}
+				//lookup = Word(Tag::ID, b);
+				//hashtable.insert(std::pair<string, Word>(lookup.toString(), lookup));
+				//return lookup;
+
+
+			if (b.compare("and") == 0) {
+				return Tag::AND;
+			}
+			if (b.compare("or") == 0) {
+				return Tag::OR;
+			}
+			if (b.compare("not") == 0) {
+				return Tag::NOT;
+			}
+			if (b.compare("true") == 0) {
+				return Tag::TRUE;
+			}
+			if (b.compare("false") == 0) {
+				return Tag::FALSE;
+			}
+			if (b.compare("bool") == 0) {
+				return Tag::BOOL;
+			}
+			if (b.compare("int") == 0) {
+				return Tag::INT;
+			}
+			if (b.compare("real") == 0) {
+				return Tag::REAL;
+			}
+			if (b.compare("string") == 0) {
+				return Tag::STRING;
+			}
+			if (b.compare("sin") == 0) {
+				return Tag::SIN;
+			}
+			if (b.compare("cos") == 0) {
+				return Tag::COS;
+			}
+			if (b.compare("tan") == 0) {
+				return Tag::TAN;
+			}
+			if (b.compare("if") == 0) {
+				return Tag::IF;
+			}
+			if (b.compare("while") == 0) {
+				return Tag::WHILE;
+			}
+			if (b.compare("let") == 0) {
+				return Tag::LET;
+			}
+			if (b.compare("stdout") == 0) {
+				return Tag::STDOUT;
+			}
+				//cout << b << "\n";
+
+			else { 
+				return Tag::ID;
+			}
 		}
-		std::cout << "Got out";
 	}
 	testfile.close();
 
 	//cout << "Reached EOF\n";
-	return Tag::END;
+	if (testfile.peek() < 0) {
+
+		return Tag::END;
+	}
+
 }
 
 void Lexer::print_map() {

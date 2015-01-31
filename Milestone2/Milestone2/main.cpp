@@ -20,14 +20,9 @@ int main() {
 	int size = 0;
 	Token tokens[100];
 
-	tokens[size] = lex.scan(offset);
-	cout << tokens[size].tag;
-	cout << offset;
-	size++;
-
 	while (tokens[size].tag != (Tag::END)) {
 		tokens[size] = lex.scan(offset);
-		cout << tokens[size].tag;
+		cout << tokens[size].tag << "\n";
 		size++;
 	}
 
