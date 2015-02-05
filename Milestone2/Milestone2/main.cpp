@@ -16,36 +16,39 @@ int main() {
 	//char c;
 	int offset = 0;
 	Lexer lex;
-	string temp;
+	Token t;
+	Token * k;
 
-	int size = 0;
-	Token tokens[100];
-
-	while (tokens[size].tag != (Tag::END)) {
-		tokens[size] = lex.scan(offset);
-		
-		//cout << (tokens[size]).toString() << "\n";
-		if (tokens[size].tag < 265 || (tokens[size].tag > 277 && tokens[size].tag < 285)) {
-			cout << tokens[size].tag;
+	while (t.tag != Tag::END) {
+		t = lex.scan(offset);
+		if (t.tag == 289) {
+			Word& word = (Word&)t;
+			//k = &word;
+			//cout << k->toString();
+			//cout << word.toString;
+			cout << " String\n";
+		}
+		if (t.tag < 265 || (t.tag > 277 && t.tag < 285)) {
+			Word& word = (Word&)t;
+			//cout << ((Word)word).toString();
 			cout << " Keyword\n";
 		}
-		if (tokens[size].tag == 286) {
-			cout << tokens[size].tag;
-			cout << " Id\n";
+		if (t.tag == 286) {
+			Word& word = (Word&)t;
+			cout << " ID\n";
 		}
-		if (tokens[size].tag == 287) {
-			cout << tokens[size].tag;
+		if (t.tag == 287) {
+			Num& num = (Num&)t;
 			cout << " Integer\n";
 		}
-		if (tokens[size].tag == 288) {
-			cout << tokens[size].tag;
-			cout << " Real\n";
+		if (t.tag == 288) {
+			Real& real = (Real&)t;
+			cout << " Float\n";
 		}
-		if (tokens[size].tag > 264 && tokens[size].tag < 278) {
-			cout << tokens[size].tag;
+		if (t.tag > 264 && t.tag < 278) {
+			Word& word = (Word&)t;
 			cout << " Operator\n";
 		}
-		size++;
 	}
 
 	getchar();

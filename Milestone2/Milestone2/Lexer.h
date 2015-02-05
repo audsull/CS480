@@ -1,8 +1,7 @@
 #pragma once
 #include "Word.h"
-#include "Num.h"
 #include "Real.h"
-//#include "Word.cpp"
+#include "Num.h"
 
 #include <cstdio>
 #include <iostream>
@@ -29,8 +28,6 @@ public:
 	Token scan(int&);
 	//void readch();
 	//bool reachch(char);
-	
-	//Print hashmap to file!
 	void print_map();
 	void print_tokens();
 	~Lexer();

@@ -11,7 +11,7 @@ public:
 
 	Token();
 	Token(int);
-	string toString();
+	virtual string toString();
 	~Token();
 };
 

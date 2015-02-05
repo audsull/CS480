@@ -9,12 +9,13 @@ class Word :
 	public Token
 {
 public:
-	string lexeme;
 	int token;
+	string lexeme;
 	
 	Word();
 	Word(int, string);
+	Word setValues(int, string);
 	string toString();
-	string get_lexeme(Token);
+	void print_word(Word);
 	~Word();
 };

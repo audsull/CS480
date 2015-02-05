@@ -1,1 +1,1 @@
-and * 1 while token for i equal
+and * ^ "hello" 4 while 2.00 token for i equal 6

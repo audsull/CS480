@@ -56,6 +56,7 @@ Token Lexer::scan(int &offset) {
 		}
 		
 		while (true) {
+			//looking for operators or strings
 			if (isalpha(c) || isdigit(c) || c == ' ' || c == '\t' || c == '\n') {
 				break;
 			}
@@ -65,86 +66,129 @@ Token Lexer::scan(int &offset) {
 				ss << c;
 				ss >> s;
 
-				cout << c << " ";
+				Word op;
+				op.lexeme = s;
+
+				Word str;
+
+				//string
+				if (c == '\"') {
+					string st;
+					testfile.get(c);
+					offset++;
+					while (testfile.peek() != '\"') {
+						st += c;
+						testfile.get(c);
+						offset++;
+					}
+					st += c;
+					offset++;
+					//cout << st << " ";
+					str.tag = Tag::STRINGTYPE;
+					str.lexeme = st;
+
+					//str = Word(289, st);
+					cout << str.lexeme;
+					//cout << str.tag;
+
+					return str;
+				}
+
+
+				Word n;
+				cout << c;
 
 				switch (c) {
 				case '&':
-					And.lexeme = c;
-					//return And;
-					
-					return Tag::AND;
+					//n = Word(Tag::AND, s);
+					op.tag = Tag::AND;
+					return op;
 				case '|':
-					return Tag::OR;
+					op.tag = Tag::OR;
+					return op;
 				case '+':
-					return Tag::PLUS;
+					op.tag = Tag::PLUS;
+					return op;
 				case '-':
-					return Tag::MINUS;
+					op.tag = Tag::MINUS;
+					return op;
 				case '*':
-					//reserve(Mult);
-					//return Mult;
-					//std::cout << s << "\n";
-					//return Word(Tag::MULT, s);
-					return Tag::MULT;
+					op.tag = Tag::MULT;
+					return op;
 				case '/':
-					return Tag::DIV;
+					op.tag = Tag::DIV;
+					return op;
 				case '^':
-					return Tag::POW;
+					op.tag = Tag::POW;
+					return op;
 				case '%':
-					return Tag::MOD;
+					op.tag = Tag::MOD;
+					return op;
 				case '=':
-					//cout << "Equal ";
-					return Tag::EQUAL;
+					op.tag = Tag::EQUAL;
+					return op;
 				case '!':
-					return Tag::NOT;
+					op.tag = Tag::NOT;
+					return op;
 				case '<':
-					return Tag::LT;
+					op.tag = Tag::LT;
+					return op;
 				case '>':
-					return Tag::GT;
+					op.tag = Tag::GT;
+					return op;
 				case ':':
 					if (testfile.peek() == '=') {
 						testfile.get(c);
-						return Tag::ASSIGN;
+						op.lexeme += c;
+						op.tag = Tag::ASSIGN;
+						return op;
 					}
 				}
 				testfile.get(c);
 				offset++;
 			}
-		}
+		} //out of loop; can look for nums, reals, keywords, or ids now
+
+
+		Num n;
+		//Real r;
+		int v = 0;
+		float x = 0;
+		string l;
 
 		//numbers		
 			if (isdigit(c)) {
-				int v = 0;
-				do {
-					v = 10 * v + (char)c;
+				while (isdigit(c)) {
+					l += c;
 					testfile.get(c);
 					offset++;
-				} while (isdigit(c));
-				if (c != '.') {
-					//return Num(v);
-					cout << v << " ";
-					return Tag::INTTYPE;
 				}
-				float x = (float)v;
-				float d = 10;
-				for (;;) {
+				
+				if (c == '.') {
+					l += c; // add the decimal
+					//cout << l;
 					testfile.get(c);
-					if (!isdigit(c)) break;
-					x = x + (int)c / d;
-					d = d * 10;
+					//cout << c;
+					while (isdigit(c)) {
+						l += c; 
+						testfile.get(c);
+						offset++;
+					}
+					cout << l;
+					x = stof(l);
+					//cout << x;
+					return Tag::REALTYPE;
 				}
-				//return Real(x);
-				cout << x << ' ';
-				return Tag::REALTYPE;
+				else {
+					//return Num(v);
+					v = stoi(l);
+					cout << v;
+					n.tag = Tag::INTTYPE;
+					n.value = v;
+					return n;
+				}
 			}
 
-			//string
-			if (c == '\"') {
-				cout << "String? ";
-				while (testfile.peek() != '\"') {
-					testfile.get(c);
-				}
-				return Tag::STRING;
-			}
 
 		//letters
 		if (isalpha(c)) {
@@ -155,78 +199,85 @@ Token Lexer::scan(int &offset) {
 				testfile.get(c);
 				offset++;
 			} while (isalpha(c) || isdigit(c));
-				//lookup = hashtable.find(b);
-				
-				//if (1) {
-					//return lookup;
-				//}
-				//lookup = Word(Tag::ID, b);
-				//hashtable.insert(std::pair<string, Word>(lookup.toString(), lookup));
-				//return lookup;
-			cout << b << " ";
 
+			w.lexeme = b;
+			cout << b;
 			if (b.compare("and") == 0) {
+				w.tag = Tag::AND;
 				w = Word(Tag::AND, b);
-				hashtable.insert(std::pair<string, Word>(b, w));
-				//valuemap.insert(pair<Tag::AND, b>);
-				
-				return Tag::AND;
+				return w;
 			}
 			if (b.compare("or") == 0) {
-				return Tag::OR;
+				w.tag = Tag::OR;
+				return w;
 			}
 			if (b.compare("not") == 0) {
-				return Tag::NOT;
+				w.tag = Tag::NOT;
+				return w;
 			}
 			if (b.compare("true") == 0) {
-				return Tag::TRUE;
+				w.tag = Tag::TRUE;
+				return w;
 			}
 			if (b.compare("false") == 0) {
-				return Tag::FALSE;
+				w.tag = Tag::FALSE;
+				return w;
 			}
 			if (b.compare("bool") == 0) {
-				return Tag::BOOL;
+				w.tag = Tag::BOOL;
+				return w;
 			}
 			if (b.compare("int") == 0) {
-				return Tag::INT;
+				w.tag = Tag::INT;
+				return w;
 			}
 			if (b.compare("real") == 0) {
-				return Tag::REAL;
+				w.tag = Tag::REAL;
+				return w;
 			}
 			if (b.compare("string") == 0) {
-				return Tag::STRING;
+				w.tag = Tag::STRING;
+				return w;
 			}
 			if (b.compare("sin") == 0) {
-				return Tag::SIN;
+				w.tag = Tag::SIN;
+				return w;
 			}
 			if (b.compare("cos") == 0) {
-				return Tag::COS;
+				w.tag = Tag::COS;
+				return w;
 			}
 			if (b.compare("tan") == 0) {
-				return Tag::TAN;
+				w.tag = Tag::TAN;
+				return w;
 			}
 			if (b.compare("if") == 0) {
-				return Tag::IF;
+				w.tag = Tag::IF;
+				return w;
 			}
 			if (b.compare("while") == 0) {
-				return Tag::WHILE;
+				w.tag = Tag::WHILE;
+				return w;
 			}
 			if (b.compare("let") == 0) {
-				return Tag::LET;
+				w.tag = Tag::LET;
+				return w;
 			}
 			if (b.compare("stdout") == 0) {
-				return Tag::STDOUT;
+				w.tag = Tag::STDOUT;
+				return w;
 			}
 			else { 
-				return Tag::ID;
+				w.tag = Tag::ID;
+				return w;
 			}
 		}
+
 	}
 	testfile.close();
 
-
 	if (testfile.peek() < 0) {
-	//cout << "Reached EOF\n";		
+	cout << "Reached EOF\n";		
 		return Tag::END;
 	}
 

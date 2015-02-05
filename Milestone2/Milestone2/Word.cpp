@@ -13,16 +13,17 @@ Word::Word(int t, string s)
 string Word::toString() {
 	return lexeme;
 }
-
+Word Word::setValues(int t, string s) {
+	Word w;
+	w.token = t;
+	w.lexeme = s;
+	return w;
+}
 Word::~Word()
 {
 }
 
-string Word::get_lexeme(Token t) {
-	return lexeme;
-}
-
-void print_word(Word w) {
+void Word::print_word(Word w) {
 	cout << w.lexeme << "\n";
 	cout << w.tag << "\n";
 }
