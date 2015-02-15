@@ -14,6 +14,7 @@
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Num.cpp" />
+    <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Real.cpp" />
     <ClCompile Include="Tag.cpp" />
     <ClCompile Include="Token.cpp" />
@@ -22,6 +23,7 @@
   <ItemGroup>
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Num.h" />
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="Real.h" />
     <ClInclude Include="Tag.h" />
     <ClInclude Include="Token.h" />

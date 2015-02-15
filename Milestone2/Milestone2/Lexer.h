@@ -17,6 +17,9 @@ class Lexer
 {
 
 public:
+	ifstream testfile;
+
+
 	int line = 1;
 	char peek = ' ';
 	char c;
@@ -26,10 +29,14 @@ public:
 	void reserve(Word);
 	Lexer();
 	Token scan(int&);
-	//void readch();
-	//bool reachch(char);
-	void print_map();
-	void print_tokens();
-	~Lexer();
+	Token scan2(int&);
+
+	Token checkName(int&);
+	Token checkNum(int&);
+	Token checkOper(int&);
+	Token checkString(int&);
+
+	Token nextToken(int&); //next token lookaheads at the next lexeme
+
 };
 

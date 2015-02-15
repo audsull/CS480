@@ -22,32 +22,27 @@ void Lexer::reserve(Word w) {
 }
 Lexer::Lexer()
 {
-	//reserved keywords
-	reserve(If);
-	reserve(While);
-	reserve(Let);
-	//reserve(Assign);
-	reserve(Sin);
-	reserve(Cos);
-	reserve(Tan);
-	reserve(True);
-	reserve(False);
-	reserve(Bool);
-	reserve(Int);
-	reserve(Real);
-	reserve(String);
-	reserve(Stdout);
 }
+//finds the next token
+Token Lexer::nextToken(int &offset) {
+	Token next;
+	next = scan(offset);
+	return next;
+}
+
 Token Lexer::scan(int &offset) {
-	int cur = 0;
 	ifstream testfile;
 	testfile.open("testfile.txt");
 	testfile.seekg(offset);
 
-	if (testfile.is_open()) {
+	Token* r;
+
+	while (!testfile.eof()) {
+		offset++;
 		while (testfile.get(c)) {
-			offset++;
 			if (c == ' ' || c == '\t' || c == '\n') {
+				///offset = offset + 2;
+				offset++;
 				continue;
 			}
 			else {
@@ -57,7 +52,7 @@ Token Lexer::scan(int &offset) {
 		
 		while (true) {
 			//looking for operators or strings
-			if (isalpha(c) || isdigit(c) || c == ' ' || c == '\t' || c == '\n') {
+			if (isalpha(c) || isdigit(c) || c == ' ' || c == '\t' || c == '\n') { //there is a prob here where we are not looking at this before nums and stuff. Need to rearrange loops.
 				break;
 			}
 			else {		
@@ -88,7 +83,7 @@ Token Lexer::scan(int &offset) {
 					str.lexeme = st;
 
 					//str = Word(289, st);
-					cout << str.lexeme;
+					//cout << str.lexeme;
 					//cout << str.tag;
 
 					return str;
@@ -96,53 +91,113 @@ Token Lexer::scan(int &offset) {
 
 
 				Word n;
-				cout << c;
+				
 
 				switch (c) {
+				case ';':
+					break;
+				case '(':
+					//cout << c;
+					op.tag = Tag::LPAR;
+					return op;
+				case ')':
+					//cout << c;
+					op.tag = Tag::RPAR;
+					return op;
 				case '&':
+					//cout << c;
 					//n = Word(Tag::AND, s);
 					op.tag = Tag::AND;
 					return op;
 				case '|':
+					//cout << c;
 					op.tag = Tag::OR;
 					return op;
 				case '+':
+					//cout << c;
 					op.tag = Tag::PLUS;
 					return op;
 				case '-':
+					//cout << c;
 					op.tag = Tag::MINUS;
 					return op;
 				case '*':
+					//cout << c;
 					op.tag = Tag::MULT;
 					return op;
 				case '/':
+					//cout << c;
 					op.tag = Tag::DIV;
 					return op;
 				case '^':
+					//cout << c;
 					op.tag = Tag::POW;
 					return op;
 				case '%':
+					//cout << c;
 					op.tag = Tag::MOD;
 					return op;
 				case '=':
+					//cout << c;
 					op.tag = Tag::EQUAL;
 					return op;
 				case '!':
-					op.tag = Tag::NOT;
+					if (testfile.peek() != '=') {
+						//cout << c;
+						op.tag = Tag::NOT;
+					}
+					else {
+						s = c;
+						testfile.get(c);
+						s += c;
+						//cout << s;
+						offset = offset++;
+						op.tag = Tag::NE;
+					}
 					return op;
 				case '<':
-					op.tag = Tag::LT;
+					if (testfile.peek() != '=') {
+						//cout << c;
+						op.tag = Tag::LT;
+					}
+					else {
+						s = c;
+						testfile.get(c);
+						s += c;
+						//cout << s;
+						offset++;
+						op.tag = Tag::LE;
+					}
 					return op;
 				case '>':
-					op.tag = Tag::GT;
+					if (testfile.peek() != '=') {
+						//cout << c;
+						op.tag = Tag::GT;
+					}
+					else {
+						s = c;
+						testfile.get(c);
+						s += c;
+						//cout << s;
+						offset++;
+						op.tag = Tag::GE;
+					}
 					return op;
 				case ':':
-					if (testfile.peek() == '=') {
-						testfile.get(c);
-						op.lexeme += c;
-						op.tag = Tag::ASSIGN;
-						return op;
+					if (testfile.peek() != '=') {
+						break;
 					}
+					else {
+						s = c;
+						testfile.get(c);
+						s += c;
+						//cout << s;
+						offset++;
+						op.tag = Tag::ASSIGN;
+					}
+					return op;
+				default:
+					break;
 				}
 				testfile.get(c);
 				offset++;
@@ -157,38 +212,37 @@ Token Lexer::scan(int &offset) {
 		string l;
 
 		//numbers		
-			if (isdigit(c)) {
+		if (isdigit(c)) {
+			while (isdigit(c)) {
+				l += c;
+				testfile.get(c);
+				offset++;
+			}
+			if (c == '.') {
+				l += c; // add the decimal
+				//cout << l;
+				testfile.get(c);
+				//cout << c;
 				while (isdigit(c)) {
-					l += c;
+					l += c; 
 					testfile.get(c);
 					offset++;
 				}
-				
-				if (c == '.') {
-					l += c; // add the decimal
-					//cout << l;
-					testfile.get(c);
-					//cout << c;
-					while (isdigit(c)) {
-						l += c; 
-						testfile.get(c);
-						offset++;
-					}
-					cout << l;
-					x = stof(l);
-					//cout << x;
-					return Tag::REALTYPE;
-				}
-				else {
-					//return Num(v);
-					v = stoi(l);
-					cout << v;
-					n.tag = Tag::INTTYPE;
-					n.value = v;
-					return n;
-				}
+				//cout << l;
+				x = stof(l);
+				//cout << x;
+				return Tag::REALTYPE;
 			}
-
+			else {
+					//return Num(v);
+				v = stoi(l);
+				//cout << v;
+				n.tag = Tag::INTTYPE;
+				n.value = v;
+				offset--;
+				return n;
+			}
+		}
 
 		//letters
 		if (isalpha(c)) {
@@ -199,9 +253,10 @@ Token Lexer::scan(int &offset) {
 				testfile.get(c);
 				offset++;
 			} while (isalpha(c) || isdigit(c));
+			//offset--;
 
 			w.lexeme = b;
-			cout << b;
+			//cout << b;
 			if (b.compare("and") == 0) {
 				w.tag = Tag::AND;
 				w = Word(Tag::AND, b);
@@ -268,35 +323,328 @@ Token Lexer::scan(int &offset) {
 				return w;
 			}
 			else { 
+				//offset--;
+
 				w.tag = Tag::ID;
 				return w;
 			}
 		}
 
 	}
-	testfile.close();
 
 	if (testfile.peek() < 0) {
 	cout << "Reached EOF\n";		
 		return Tag::END;
 	}
-
+	testfile.close();
 }
+Token Lexer::checkName(int &offset) {
+	if (isalpha(c)) {
+		string b;
+		Word w;
+		do {
+			b += c;
+			testfile.get(c);
+			offset++;
+		} while (isalpha(c) || isdigit(c));
+		//offset--;
 
-void Lexer::print_map() {
-	int size = hashtable.size();
-	std::cout << "\nPrinting Table:\n";
+		w.lexeme = b;
+		cout << b;
+		if (b.compare("and") == 0) {
+			w.tag = Tag::AND;
+			w = Word(Tag::AND, b);
+			return w;
+		}
+		if (b.compare("or") == 0) {
+			w.tag = Tag::OR;
+			return w;
+		}
+		if (b.compare("not") == 0) {
+			w.tag = Tag::NOT;
+			return w;
+		}
+		if (b.compare("true") == 0) {
+			w.tag = Tag::TRUE;
+			return w;
+		}
+		if (b.compare("false") == 0) {
+			w.tag = Tag::FALSE;
+			return w;
+		}
+		if (b.compare("bool") == 0) {
+			w.tag = Tag::BOOL;
+			return w;
+		}
+		if (b.compare("int") == 0) {
+			w.tag = Tag::INT;
+			return w;
+		}
+		if (b.compare("real") == 0) {
+			w.tag = Tag::REAL;
+			return w;
+		}
+		if (b.compare("string") == 0) {
+			w.tag = Tag::STRING;
+			return w;
+		}
+		if (b.compare("sin") == 0) {
+			w.tag = Tag::SIN;
+			return w;
+		}
+		if (b.compare("cos") == 0) {
+			w.tag = Tag::COS;
+			return w;
+		}
+		if (b.compare("tan") == 0) {
+			w.tag = Tag::TAN;
+			return w;
+		}
+		if (b.compare("if") == 0) {
+			w.tag = Tag::IF;
+			return w;
+		}
+		if (b.compare("while") == 0) {
+			w.tag = Tag::WHILE;
+			return w;
+		}
+		if (b.compare("let") == 0) {
+			w.tag = Tag::LET;
+			return w;
+		}
+		if (b.compare("stdout") == 0) {
+			w.tag = Tag::STDOUT;
+			return w;
+		}
+		else {
+			//offset--;
 
-	for (std::map<string, Word>::const_iterator it = hashtable.begin(); 
-		it != hashtable.end(); ++it) {
-		cout << "<" << it->first << ", " << it->second.lexeme << ", " << it->second.token << ">\n";
+			w.tag = Tag::ID;
+			return w;
+		}
+	}
+}
+Token Lexer::checkNum(int &offset) {
+	Num n;
+	//Real r;
+	int v = 0;
+	float x = 0;
+	string l;
+
+	//numbers		
+	if (isdigit(c)) {
+		while (isdigit(c)) {
+			l += c;
+			testfile.get(c);
+			offset++;
+		}
+		if (c == '.') {
+			l += c; // add the decimal
+			//cout << l;
+			testfile.get(c);
+			//cout << c;
+			while (isdigit(c)) {
+				l += c;
+				testfile.get(c);
+				offset++;
+			}
+			cout << l;
+			x = stof(l);
+			//cout << x;
+			return Tag::REALTYPE;
+		}
+		else {
+			//return Num(v);
+			v = stoi(l);
+			cout << v;
+			n.tag = Tag::INTTYPE;
+			n.value = v;
+			offset--;
+			return n;
+		}
+	}
+}
+Token Lexer::checkString(int &offset) {
+	stringstream ss;
+	string s;
+	ss << c;
+	ss >> s;
+
+	Word op;
+	op.lexeme = s;
+
+	Word str;
+	
+	if (c == '\"') {
+		string st;
+		testfile.get(c);
+		offset++;
+		while (testfile.peek() != '\"') {
+			st += c;
+			testfile.get(c);
+			offset++;
+		}
+		st += c;
+		offset++;
+		//cout << st << " ";
+		str.tag = Tag::STRINGTYPE;
+		str.lexeme = st;
+
+		//str = Word(289, st);
+		cout << str.lexeme;
+		//cout << str.tag;
+
+		return str;
 	}
 }
 
-void Lexer::print_tokens() {
+Token Lexer::checkOper(int &offset) {
+	Word n;
+	stringstream ss;
+	string s;
+	ss << c;
+	ss >> s;
 
+	Word op;
+	op.lexeme = s;
+
+	Word str;
+
+	switch (c) {
+	case ';':
+		break;
+	case '(':
+		cout << c;
+		op.tag = Tag::LPAR;
+		return op;
+	case ')':
+		cout << c;
+		op.tag = Tag::RPAR;
+		return op;
+	case '&':
+		cout << c;
+		//n = Word(Tag::AND, s);
+		op.tag = Tag::AND;
+		return op;
+	case '|':
+		cout << c;
+		op.tag = Tag::OR;
+		return op;
+	case '+':
+		cout << c;
+		op.tag = Tag::PLUS;
+		return op;
+	case '-':
+		cout << c;
+		op.tag = Tag::MINUS;
+		return op;
+	case '*':
+		cout << c;
+		op.tag = Tag::MULT;
+		return op;
+	case '/':
+		cout << c;
+		op.tag = Tag::DIV;
+		return op;
+	case '^':
+		cout << c;
+		op.tag = Tag::POW;
+		return op;
+	case '%':
+		cout << c;
+		op.tag = Tag::MOD;
+		return op;
+	case '=':
+		cout << c;
+		op.tag = Tag::EQUAL;
+		return op;
+	case '!':
+		if (testfile.peek() != '=') {
+			cout << c;
+			op.tag = Tag::NOT;
+		}
+		else {
+			s = c;
+			testfile.get(c);
+			s += c;
+			cout << s;
+			offset = offset++;
+			op.tag = Tag::NE;
+		}
+		return op;
+	case '<':
+		if (testfile.peek() != '=') {
+			cout << c;
+			op.tag = Tag::LT;
+		}
+		else {
+			s = c;
+			testfile.get(c);
+			s += c;
+			cout << s;
+			offset++;
+			op.tag = Tag::LE;
+		}
+		return op;
+	case '>':
+		if (testfile.peek() != '=') {
+			cout << c;
+			op.tag = Tag::GT;
+		}
+		else {
+			s = c;
+			testfile.get(c);
+			s += c;
+			cout << s;
+			offset++;
+			op.tag = Tag::GE;
+		}
+		return op;
+	case ':':
+		if (testfile.peek() != '=') {
+			break;
+		}
+		else {
+			s = c;
+			testfile.get(c);
+			s += c;
+			cout << s;
+			offset++;
+			op.tag = Tag::ASSIGN;
+		}
+		return op;
+	default:
+		break;
+	}
+	testfile.get(c);
+	offset++;
 }
 
-Lexer::~Lexer()
-{
+Token Lexer::scan2(int &offset) {
+	testfile.open("testfile.txt");
+	testfile.seekg(offset);
+
+	Token t;
+
+	while (!testfile.eof()) {
+		offset++;
+		while (testfile.get(c)) {
+			//whitespace
+			if (c == ' ' || c == '\t' || c == '\n') {
+				offset++;
+				//continue;
+			}
+			else {
+				t = Lexer::checkName(offset);
+				t = Lexer::checkNum(offset);
+				t = Lexer::checkString(offset);
+				t = Lexer::checkOper(offset);
+			}
+		}
+	}
+	if (testfile.peek() < 0) {
+		cout << "Reached EOF\n";
+		t = Tag::END;
+	}
+	return t;
 }

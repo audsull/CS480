@@ -8,48 +8,30 @@
 #include "Word.h"
 #include "Num.h"
 #include "Lexer.h"
+#include "Parser.h"
 
 using namespace std;
 class Token;
 
 int main() {
-	//char c;
-	int offset = 0;
-	Lexer lex;
 	Token t;
-	Token * k;
-
-	while (t.tag != Tag::END) {
-		t = lex.scan(offset);
-		if (t.tag == 289) {
-			Word& word = (Word&)t;
-			//k = &word;
-			//cout << k->toString();
-			//cout << word.toString;
-			cout << " String\n";
-		}
-		if (t.tag < 265 || (t.tag > 277 && t.tag < 285)) {
-			Word& word = (Word&)t;
-			//cout << ((Word)word).toString();
-			cout << " Keyword\n";
-		}
-		if (t.tag == 286) {
-			Word& word = (Word&)t;
-			cout << " ID\n";
-		}
-		if (t.tag == 287) {
-			Num& num = (Num&)t;
-			cout << " Integer\n";
-		}
-		if (t.tag == 288) {
-			Real& real = (Real&)t;
-			cout << " Float\n";
-		}
-		if (t.tag > 264 && t.tag < 278) {
-			Word& word = (Word&)t;
-			cout << " Operator\n";
-		}
+	Parser parse;
+	//t = parse.getToken();
+	//parse.doLex();
+	int test = 0;
+	while (test != Tag::END) {
+		test = parse.T();
 	}
+
+	/*
+	int test = 0;
+	while (test != 299) {
+		test = parse.testToken();
+		cout << test; 
+		cout << "\n";
+	}
+	*/
+	//cout << t.tag;
 
 	getchar();
 	return 0;

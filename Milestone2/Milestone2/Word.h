@@ -16,6 +16,11 @@ public:
 	Word(int, string);
 	Word setValues(int, string);
 	string toString();
+
+	//const string* getValue();
+	//void print();
+	//virtual void printLexeme(std::ostream& ostream);
+
 	void print_word(Word);
 	~Word();
 };

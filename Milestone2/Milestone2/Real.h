@@ -9,6 +9,9 @@ public:
 	Real();
 	Real(float);
 	string toString();
+	double getValue();
+	void print();
+	virtual void printLexeme(std::ostream& ostream);
 	~Real();
 };
 
