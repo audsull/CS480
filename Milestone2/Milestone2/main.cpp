@@ -21,10 +21,10 @@ int main() {
 	int test = 0;
 	while (test != Tag::END) {
 		test = parse.T();
+		cout << "\n\n";
 	}
 
 	/*
-	int test = 0;
 	while (test != 299) {
 		test = parse.testToken();
 		cout << test; 

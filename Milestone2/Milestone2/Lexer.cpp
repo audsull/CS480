@@ -333,7 +333,7 @@ Token Lexer::scan(int &offset) {
 	}
 
 	if (testfile.peek() < 0) {
-	cout << "Reached EOF\n";		
+	//cout << "Reached EOF\n";		
 		return Tag::END;
 	}
 	testfile.close();
