@@ -18,11 +18,14 @@ int main() {
 	Parser parse;
 	//t = parse.getToken();
 	//parse.doLex();
+	
 	int test = 0;
 	while (test != Tag::END) {
 		test = parse.T();
 		cout << "\n\n";
 	}
+
+	parse.result();
 
 	/*
 	while (test != 299) {

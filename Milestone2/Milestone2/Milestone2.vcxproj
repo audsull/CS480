@@ -18,6 +18,7 @@
     <ClCompile Include="Real.cpp" />
     <ClCompile Include="Tag.cpp" />
     <ClCompile Include="Token.cpp" />
+    <ClCompile Include="Tree.cpp" />
     <ClCompile Include="Word.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -27,6 +28,7 @@
     <ClInclude Include="Real.h" />
     <ClInclude Include="Tag.h" />
     <ClInclude Include="Token.h" />
+    <ClInclude Include="Tree.h" />
     <ClInclude Include="Word.h" />
   </ItemGroup>
   <ItemGroup>
