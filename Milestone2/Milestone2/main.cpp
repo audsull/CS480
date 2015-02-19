@@ -24,8 +24,11 @@ int main() {
 		test = parse.T();
 		cout << "\n\n";
 	}
+	cout << "Finished";
 
 	parse.result();
+
+
 
 	/*
 	while (test != 299) {
