@@ -6,9 +6,6 @@
 #include <vector>
 #include "Tag.h"
 #include "Token.h"
-#include "Word.h"
-#include "Num.h"
-#include "Dec.h"
 #include "Lexer.h"
 
 
@@ -62,6 +59,26 @@ Token Parser::testValue() {
 		cout << "End";
 	}
 	return t;
+}
+void Parser::printVal(Token cur) {
+	if (cur.tag == 289) {
+		cout << cur.tag << " " << cur.lexeme << " String\n";
+	}
+	if (cur.tag < 265 || (cur.tag > 277 && cur.tag < 285)) {
+		cout << cur.tag << " " << cur.lexeme << " Keyword\n";
+	}
+	if (cur.tag == 286) {
+		cout << cur.tag << " " << cur.lexeme << " ID\n";
+	}
+	if (cur.tag == 287) {
+		cout << cur.tag << " " << cur.value << " Integer\n";
+	}
+	if (cur.tag == 288) {
+		cout << cur.tag << " " << cur.dec_value << " Float\n";
+	}
+	if (cur.tag > 264 && cur.tag < 278 || cur.tag > 289 && cur.tag < 292) {
+		cout << cur.tag << " " << cur.lexeme << " Operator\n";
+	}
 }
 
 void Parser::doLex() {
@@ -276,7 +293,7 @@ bool Parser::oper() {
 			for (int i = 0; i < lvl; i++) {
 				cout << "\t";
 			}
-			cout << ":=\n";
+			Parser::printVal(next);
 
 			cur = Parser::getToken();
 
@@ -395,50 +412,7 @@ bool Parser::binops() {
 		cout << "\t";
 	}
 
-	switch (next.tag) {
-	case Tag::PLUS:
-		cout << "+\n";
-		break;
-	case Tag::MINUS:
-		cout << "-\n";
-		break;
-	case Tag::MULT:
-		cout << "*\n";
-		break;
-	case Tag::DIV:
-		cout << "/\n";
-		break;
-	case Tag::MOD:
-		cout << "%\n";
-		break;
-	case Tag::POW:
-		cout << "^\n";
-		break;
-	case Tag::EQUAL :
-		cout << "=\n";
-		break;
-	case Tag::GT:
-		cout << ">\n";
-		break;
-	case Tag::GE:
-		cout << ">=\n";
-		break;
-	case Tag::LT:
-		cout << "<\n";
-		break;
-	case Tag::LE:
-		cout << "<=\n";
-		break;
-	case Tag::NE:
-		cout << "!=\n";
-		break;
-	case Tag::OR:
-		cout << "or\n";
-		break;
-	case Tag::AND:
-		cout << "and\n";
-		break;
-	}
+	Parser::printVal(next);
 
 	//cout << "CUR: " << cur.tag << " NEXT: " << next.tag << "\n";
 
@@ -468,29 +442,16 @@ bool Parser::binops() {
 bool Parser::unops() {
 	//cout << "[UNOPS]\n";
 	//cout << "\t\t\t";
-	
+	bool status = false;
 	for (int i = 0; i < lvl; i++) {
 		cout << "\t";
 	}
 
-	switch (next.tag) {
-	case Tag::MINUS:
-		cout << "-\n";
-		return true;
-	case Tag::NOT:
-		cout << "not\n";
-		return true;
-	case Tag::SIN:
-		cout << "sin\n";
-		return true;
-	case Tag::COS:
-		cout << "cos\n";
-		return true;
-	case Tag::TAN:
-		cout << "tan\n";
-		return true;
+	if (next.tag == Tag::MINUS || next.tag == Tag::NOT || next.tag == Tag::SIN || next.tag == Tag::COS || next.tag == Tag::TAN) {
+		Parser::printVal(next);
+		status = true;
 	}
-	return false;
+	return status;
 }
 bool Parser::constants() {
 	//cout << "[CONSTANTS]\n";
@@ -514,18 +475,12 @@ bool Parser::strings() {
 	//cout << "\t\t\t[STRINGS]\n";
 	cur = Parser::getToken();
 	bool status = false;
-	switch (cur.tag) {
-	case Tag::STRINGTYPE:
-		cout << "string";
-		return true;
-	case Tag::TRUE:
-		cout << "true";
-		return true;
-	case Tag::FALSE:
-		cout << "false";
-		return true;
+
+	if (cur.tag == Tag::STRINGTYPE || cur.tag == Tag::TRUE || cur.tag == Tag::FALSE) {
+		Parser::printVal(next);
+		status = true;
 	}
-	return false;
+	return status;
 }
 bool Parser::ids() {
 	//cout << "\t\t\t[IDS]\n";
@@ -535,7 +490,7 @@ bool Parser::ids() {
 		for (int i = 0; i < lvl; i++) {
 			cout << "\t";
 		}
-		cout << "id\n";
+		Parser::printVal(next);
 		return true;
 	}
 	return false;
@@ -548,28 +503,22 @@ bool Parser::ints() {
 		for (int i = 0; i < lvl; i++) {
 			cout << "\t";
 		}
-		cout << "int " << cur.value << "\n";
+		Parser::printVal(next);
 		return true;
 	}
 	return false;
 }
 bool Parser::floats() {
-	//cout << "\t\t\t[FLOATS]\n";
-	//cout << "CUR: " << cur.tag << " NEXT: " << next.tag << "\n";
-	
 	if (next.tag == Tag::REALTYPE) {
 		for (int i = 0; i < lvl; i++) {
 			cout << "\t";
 		}
-		cout << "real\n";
+		Parser::printVal(next);
 		return true;
 	}
 	return false;
 }
 bool Parser::stmts() {
-	//cout << "[STMTS]\n";
-	//cout << "CUR: " << cur.tag << " NEXT: " << next.tag << "\n";
-
 	bool status = false;	
 	while (!status) {
 		if (next.tag == Tag::IF)
@@ -602,7 +551,7 @@ bool Parser::printstmts() {
 			for (int i = 0; i < lvl; i++) {
 				cout << "\t";
 			}
-			cout << "stdout\n";
+			Parser::printVal(cur);
 		}
 		Parser::oper();
 		//cur = Parser::getToken();
@@ -627,7 +576,7 @@ bool Parser::ifstmts() {
 		for (int i = 0; i < lvl; i++) {
 			cout << "\t";
 		}
-		cout << "if\n";
+		Parser::printVal(next);
 
 		cur = Parser::getToken();
 		//cout << "CUR: " << cur.tag << " NEXT: " << next.tag << "\n";
@@ -662,7 +611,7 @@ bool Parser::whilestmts() {
 		for (int i = 0; i < lvl; i++) {
 			cout << "\t";
 		}
-		cout << "while\n";
+		Parser::printVal(next);
 
 		cur = Parser::getToken();
 		//cout << "CUR: " << cur.tag << " NEXT: " << next.tag << "\n";
@@ -702,7 +651,7 @@ bool Parser::letstmts() {
 		for (int i = 0; i < lvl; i++) {
 			cout << "\t";
 		}
-		cout << "let\n";
+		Parser::printVal(next);
 
 		cur = Parser::getToken();
 
@@ -794,21 +743,6 @@ bool Parser::type() {
 		cout << "\t";
 	}
 
-	if (next.tag == Tag::INT) {
-		cout << "int\n";
-		return true;
-	}
-	if (next.tag == Tag::REAL) {
-		cout << "real\n";
-		return true;
-	}
-	if (next.tag == Tag::BOOL) {
-		cout << "bool\n";
-		return true;
-	}
-	if (next.tag == Tag::STRING) {
-		cout << "string\n";
-		return true;
-	}
+	Parser::printVal(next);
 	return false;
 }

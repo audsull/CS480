@@ -20,7 +20,7 @@ public:
 	Token(int, float);
 
 	virtual string toString();
-	virtual void print();
+	void print(int);
 	virtual void printLexeme(std::ostream&);
 
 	~Token();

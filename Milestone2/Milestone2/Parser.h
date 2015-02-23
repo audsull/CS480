@@ -21,6 +21,8 @@ public:
 	int testToken();
 	Token testValue();
 
+	void printVal(Token);
+
 	Token T();
 	bool S();
 	bool S1();

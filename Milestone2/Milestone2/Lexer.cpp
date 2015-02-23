@@ -1,25 +1,6 @@
 #include "Lexer.h"
 
 
-static Word Bool = Word(Tag::BOOL, "bool"), True = Word(Tag::TRUE, "true"), False = Word(Tag::FALSE, "false"),
-And = Word(Tag::AND, "&&"), Or = Word(Tag::OR, "||"), Not = Word(Tag::NOT, "!"),
-Int = Word(Tag::INT, "int"), Real = Word(Tag::REAL, "real"), String = Word(Tag::STRING, "string"),
-Plus = Word(Tag::PLUS, "+"), Minus = Word(Tag::MINUS, "-"), Mult = Word(Tag::MULT, "*"), Div = Word(Tag::DIV, "/"),
-Mod = Word(Tag::MOD, "%"), Pow = Word(Tag::POW, "^"), Equal = Word(Tag::EQUAL, "="),
-Lt = Word(Tag::LT, "<"), Gt = Word(Tag::GT, ">"), Le = Word(Tag::LE, "<="), Ge = Word(Tag::GE, ">="),
-Ne = Word(Tag::NE, "!="), Stdout = Word(Tag::STDOUT, "stdout"),
-If = Word(Tag::IF, "if"), While = Word(Tag::WHILE, "while"), Let = Word(Tag::LET, "let"), Assign = Word(Tag::ASSIGN, ":="),
-Sin = Word(Tag::SIN, "sin"), Cos = Word(Tag::COS, "cos"), Tan = Word(Tag::TAN, "tan");
-
-class Num;
-class Word;
-class Dec;
-
-
-void Lexer::reserve(Word w) {
-	hashtable.insert(std::pair<string, Word>(w.toString(), w)); //lexeme is the actual string, word is the variable type
-	 return;
-}
 Lexer::Lexer()
 {
 }
@@ -61,11 +42,6 @@ Token Lexer::scan(int &offset) {
 				ss << c;
 				ss >> s;
 
-				Word op;
-				op.lexeme = s;
-
-				Word str;
-
 				//string
 				if (c == '\"') {
 					string st;
@@ -83,9 +59,6 @@ Token Lexer::scan(int &offset) {
 					return token;
 				}
 
-
-				Word n;
-				
 
 				switch (c) {
 				case ';':
@@ -151,7 +124,6 @@ Token Lexer::scan(int &offset) {
 						token = Token(Tag::LE, s);
 						return token;
 					}
-					return op;
 				case '>':
 					if (testfile.peek() != '=') {
 						token = Token(Tag::GT, s);
@@ -165,7 +137,6 @@ Token Lexer::scan(int &offset) {
 						token = Token(Tag::GE, s);
 						return token;
 					}
-					return op;
 				case ':':
 					if (testfile.peek() != '=') {
 						break;
@@ -178,7 +149,7 @@ Token Lexer::scan(int &offset) {
 						token = Token(Tag::ASSIGN, s);
 						return token;
 					}
-					return op;
+
 				default:
 					break;
 				}
@@ -188,8 +159,6 @@ Token Lexer::scan(int &offset) {
 		} //out of loop; can look for nums, reals, keywords, or ids now
 
 
-		Num n;
-		Dec r;
 
 		int v = 0;
 		float x = 0;
@@ -230,7 +199,7 @@ Token Lexer::scan(int &offset) {
 		//letters
 		if (isalpha(c)) {
 			string b;
-			Word w;
+
 			do {
 				b += c;
 				testfile.get(c);

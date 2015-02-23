@@ -1,17 +1,16 @@
 #pragma once
-#include "Word.h"
-#include "Dec.h"
-#include "Num.h"
+#include "Token.h"
+#include "Tag.h"
 
 #include <cstdio>
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <string>
 #include <map>
 
-class Word;
 
 class Lexer
 {
@@ -24,9 +23,7 @@ public:
 	char peek = ' ';
 	char c;
 	//Store in hashtable as lexeme, valueS
-	std::map<string, Word> hashtable;
-	std::map<int, string> valuemap;
-	void reserve(Word);
+
 	Lexer();
 	Token scan(int&);
 	Token scan2(int&);

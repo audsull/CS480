@@ -20,8 +20,8 @@ Token::Token(int t, float f) {
 	dec_value = f;
 }
 
-void Token::print() {
-	switch (tag) {
+void Token::print(int t) {
+	switch (t) {
 	case Tag::BOOL:
 		cout << "bool";
 	case Tag::AND:

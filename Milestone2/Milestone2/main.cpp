@@ -5,9 +5,6 @@
 #include <vector>
 #include "Tag.h"
 #include "Token.h"
-#include "Word.h"
-#include "Num.h"
-#include "Dec.h"
 #include "Lexer.h"
 #include "Parser.h"
 
