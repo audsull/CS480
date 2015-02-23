@@ -62,22 +62,22 @@ Token Parser::testValue() {
 }
 void Parser::printVal(Token cur) {
 	if (cur.tag == 289) {
-		cout << cur.tag << " " << cur.lexeme << " String\n";
+		cout << cur.toString(cur) << " " << cur.lexeme << "\n";
 	}
 	if (cur.tag < 265 || (cur.tag > 277 && cur.tag < 285)) {
-		cout << cur.tag << " " << cur.lexeme << " Keyword\n";
+		cout << cur.toString(cur) << " " << cur.lexeme << "\n";
 	}
 	if (cur.tag == 286) {
-		cout << cur.tag << " " << cur.lexeme << " ID\n";
+		cout << cur.toString(cur) << " " << cur.lexeme << "\n";
 	}
 	if (cur.tag == 287) {
-		cout << cur.tag << " " << cur.value << " Integer\n";
+		cout << cur.toString(cur) << " " << cur.value << "\n";
 	}
 	if (cur.tag == 288) {
-		cout << cur.tag << " " << cur.dec_value << " Float\n";
+		cout << cur.toString(cur) << " " << cur.dec_value << "\n";
 	}
 	if (cur.tag > 264 && cur.tag < 278 || cur.tag > 289 && cur.tag < 292) {
-		cout << cur.tag << " " << cur.lexeme << " Operator\n";
+		cout << cur.toString(cur) << " " << cur.lexeme << "\n";
 	}
 }
 

@@ -19,10 +19,6 @@ public:
 	Token(int, int);
 	Token(int, float);
 
-	virtual string toString();
-	void print(int);
-	virtual void printLexeme(std::ostream&);
-
-	~Token();
+	string toString(Token);
 };
 
