@@ -5,8 +5,9 @@ Num::Num() {
 }
 Num::Num(int v)
 {
-	Token::Token(Tag::INT);
+	//Token::Token(Tag::INT);
 	value = v;
+	tag = Tag::INTTYPE;
 }
 string Num::toString() {
 	//return "" + value;

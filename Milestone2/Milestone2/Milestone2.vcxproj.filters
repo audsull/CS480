@@ -24,9 +24,6 @@
     <ClCompile Include="Num.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Real.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Tag.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -42,15 +39,15 @@
     <ClCompile Include="Tree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Dec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lexer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Num.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Real.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tag.h">
@@ -66,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

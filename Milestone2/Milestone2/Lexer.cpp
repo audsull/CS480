@@ -1,5 +1,6 @@
 #include "Lexer.h"
 
+
 static Word Bool = Word(Tag::BOOL, "bool"), True = Word(Tag::TRUE, "true"), False = Word(Tag::FALSE, "false"),
 And = Word(Tag::AND, "&&"), Or = Word(Tag::OR, "||"), Not = Word(Tag::NOT, "!"),
 Int = Word(Tag::INT, "int"), Real = Word(Tag::REAL, "real"), String = Word(Tag::STRING, "string"),
@@ -12,8 +13,7 @@ Sin = Word(Tag::SIN, "sin"), Cos = Word(Tag::COS, "cos"), Tan = Word(Tag::TAN, "
 
 class Num;
 class Word;
-class Real;
-
+class Dec;
 
 
 void Lexer::reserve(Word w) {
@@ -35,7 +35,7 @@ Token Lexer::scan(int &offset) {
 	testfile.open("testfile.txt");
 	testfile.seekg(offset);
 
-	Token* r;
+	Token token;
 
 	while (!testfile.eof()) {
 		offset++;
@@ -78,15 +78,9 @@ Token Lexer::scan(int &offset) {
 					}
 					st += c;
 					offset++;
-					//cout << st << " ";
-					str.tag = Tag::STRINGTYPE;
-					str.lexeme = st;
 
-					//str = Word(289, st);
-					//cout << str.lexeme;
-					//cout << str.tag;
-
-					return str;
+					token = Token(Tag::STRINGTYPE, st);
+					return token;
 				}
 
 
@@ -97,68 +91,56 @@ Token Lexer::scan(int &offset) {
 				case ';':
 					break;
 				case '(':
-					//cout << c;
-					op.tag = Tag::LPAR;
-					return op;
+					token = Token(Tag::LPAR, s);
+					return token;
 				case ')':
-					//cout << c;
-					op.tag = Tag::RPAR;
-					return op;
+					token = Token(Tag::RPAR, s);
+					return token;
 				case '&':
-					//cout << c;
-					//n = Word(Tag::AND, s);
-					op.tag = Tag::AND;
-					return op;
+					token = Token(Tag::AND, s);
+					return token;
 				case '|':
-					//cout << c;
-					op.tag = Tag::OR;
-					return op;
+					token = Token(Tag::OR, s);
+					return token;
 				case '+':
-					//cout << c;
-					op.tag = Tag::PLUS;
-					return op;
+					token = Token(Tag::PLUS, s);
+					return token;
 				case '-':
-					//cout << c;
-					op.tag = Tag::MINUS;
-					return op;
+					token = Token(Tag::MINUS, s);
+					return token;
 				case '*':
-					//cout << c;
-					op.tag = Tag::MULT;
-					return op;
+					token = Token(Tag::MULT, s);
+					return token;
 				case '/':
-					//cout << c;
-					op.tag = Tag::DIV;
-					return op;
+					token = Token(Tag::DIV, s);
+					return token;
 				case '^':
-					//cout << c;
-					op.tag = Tag::POW;
-					return op;
+					token = Token(Tag::POW, s);
+					return token;
 				case '%':
-					//cout << c;
-					op.tag = Tag::MOD;
-					return op;
+					token = Token(Tag::MOD, s);
+					return token;
 				case '=':
-					//cout << c;
-					op.tag = Tag::EQUAL;
-					return op;
+					token = Token(Tag::EQUAL, s);
+					return token;
 				case '!':
 					if (testfile.peek() != '=') {
-						//cout << c;
-						op.tag = Tag::NOT;
+						token = Token(Tag::NOT, s);
+						return token;
 					}
 					else {
 						s = c;
 						testfile.get(c);
 						s += c;
-						//cout << s;
+
 						offset = offset++;
-						op.tag = Tag::NE;
+						token = Token(Tag::NE, s);
+						return token;
 					}
-					return op;
 				case '<':
 					if (testfile.peek() != '=') {
-						//cout << c;
-						op.tag = Tag::LT;
+						token = Token(Tag::LT, s);
+						return token;
 					}
 					else {
 						s = c;
@@ -166,21 +148,22 @@ Token Lexer::scan(int &offset) {
 						s += c;
 						//cout << s;
 						offset++;
-						op.tag = Tag::LE;
+						token = Token(Tag::LE, s);
+						return token;
 					}
 					return op;
 				case '>':
 					if (testfile.peek() != '=') {
-						//cout << c;
-						op.tag = Tag::GT;
+						token = Token(Tag::GT, s);
+						return token;
 					}
 					else {
 						s = c;
 						testfile.get(c);
 						s += c;
-						//cout << s;
 						offset++;
-						op.tag = Tag::GE;
+						token = Token(Tag::GE, s);
+						return token;
 					}
 					return op;
 				case ':':
@@ -191,9 +174,9 @@ Token Lexer::scan(int &offset) {
 						s = c;
 						testfile.get(c);
 						s += c;
-						//cout << s;
 						offset++;
-						op.tag = Tag::ASSIGN;
+						token = Token(Tag::ASSIGN, s);
+						return token;
 					}
 					return op;
 				default:
@@ -206,7 +189,8 @@ Token Lexer::scan(int &offset) {
 
 
 		Num n;
-		//Real r;
+		Dec r;
+
 		int v = 0;
 		float x = 0;
 		string l;
@@ -230,17 +214,16 @@ Token Lexer::scan(int &offset) {
 				}
 				//cout << l;
 				x = stof(l);
-				//cout << x;
-				return Tag::REALTYPE;
+				token = Token(Tag::REALTYPE, x);
+				return token;
 			}
 			else {
 					//return Num(v);
 				v = stoi(l);
-				//cout << v;
-				n.tag = Tag::INTTYPE;
-				n.value = v;
 				offset--;
-				return n;
+
+				token = Token(Tag::INTTYPE, v);
+				return token;
 			}
 		}
 
@@ -253,80 +236,77 @@ Token Lexer::scan(int &offset) {
 				testfile.get(c);
 				offset++;
 			} while (isalpha(c) || isdigit(c));
-			//offset--;
 
-			w.lexeme = b;
+			//offset--;
 			//cout << b;
 			if (b.compare("and") == 0) {
-				w.tag = Tag::AND;
-				w = Word(Tag::AND, b);
-				return w;
+				token = Token(Tag::AND, b);
+				return token;
 			}
 			if (b.compare("or") == 0) {
-				w.tag = Tag::OR;
-				return w;
+				token = Token(Tag::OR, b);
+				return token;
 			}
 			if (b.compare("not") == 0) {
-				w.tag = Tag::NOT;
-				return w;
+				token = Token(Tag::NOT, b);
+				return token;
 			}
 			if (b.compare("true") == 0) {
-				w.tag = Tag::TRUE;
-				return w;
+				token = Token(Tag::TRUE, b);
+				return token;
 			}
 			if (b.compare("false") == 0) {
-				w.tag = Tag::FALSE;
-				return w;
+				token = Token(Tag::FALSE, b);
+				return token;
 			}
 			if (b.compare("bool") == 0) {
-				w.tag = Tag::BOOL;
-				return w;
+				token = Token(Tag::BOOL, b);
+				return token;
 			}
 			if (b.compare("int") == 0) {
-				w.tag = Tag::INT;
-				return w;
+				token = Token(Tag::INT, b);
+				return token;
 			}
 			if (b.compare("real") == 0) {
-				w.tag = Tag::REAL;
-				return w;
+				token = Token(Tag::REAL, b);
+				return token;
 			}
 			if (b.compare("string") == 0) {
-				w.tag = Tag::STRING;
-				return w;
+				token = Token(Tag::STRING, b);
+				return token;
 			}
 			if (b.compare("sin") == 0) {
-				w.tag = Tag::SIN;
-				return w;
+				token = Token(Tag::SIN, b);
+				return token;
 			}
 			if (b.compare("cos") == 0) {
-				w.tag = Tag::COS;
-				return w;
+				token = Token(Tag::COS, b);
+				return token;
 			}
 			if (b.compare("tan") == 0) {
-				w.tag = Tag::TAN;
-				return w;
+				token = Token(Tag::TAN, b);
+				return token;
 			}
 			if (b.compare("if") == 0) {
-				w.tag = Tag::IF;
-				return w;
+				token = Token(Tag::IF, b);
+				return token;
 			}
 			if (b.compare("while") == 0) {
-				w.tag = Tag::WHILE;
-				return w;
+				token = Token(Tag::WHILE, b);
+				return token;
 			}
 			if (b.compare("let") == 0) {
-				w.tag = Tag::LET;
-				return w;
+				token = Token(Tag::LET, b);
+				return token;
 			}
 			if (b.compare("stdout") == 0) {
-				w.tag = Tag::STDOUT;
-				return w;
+				token = Token(Tag::STDOUT, b);
+				return token;
 			}
 			else { 
 				//offset--;
-
-				w.tag = Tag::ID;
-				return w;
+				token = Token(Tag::ID, b);
+				return token;
 			}
 		}
 
@@ -334,10 +314,11 @@ Token Lexer::scan(int &offset) {
 
 	if (testfile.peek() < 0) {
 	//cout << "Reached EOF\n";		
-		return Tag::END;
+		return Token(Tag::END, "end");
 	}
 	testfile.close();
 }
+/*
 Token Lexer::checkName(int &offset) {
 	if (isalpha(c)) {
 		string b;
@@ -648,3 +629,4 @@ Token Lexer::scan2(int &offset) {
 	}
 	return t;
 }
+*/

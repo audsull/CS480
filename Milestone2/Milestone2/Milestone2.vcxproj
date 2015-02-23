@@ -15,7 +15,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Num.cpp" />
     <ClCompile Include="Parser.cpp" />
-    <ClCompile Include="Real.cpp" />
+    <ClCompile Include="Dec.cpp" />
     <ClCompile Include="Tag.cpp" />
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="Tree.cpp" />
@@ -25,7 +25,7 @@
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Num.h" />
     <ClInclude Include="Parser.h" />
-    <ClInclude Include="Real.h" />
+    <ClInclude Include="Dec.h" />
     <ClInclude Include="Tag.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="Tree.h" />

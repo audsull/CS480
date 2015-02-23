@@ -9,6 +9,7 @@ class Num :
 {
 public:
 	int value;
+	int tag;
 	Num();
 	Num(int);
 	string toString();

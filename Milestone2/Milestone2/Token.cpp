@@ -5,9 +5,19 @@
 Token::Token() {
 
 }
-Token::Token(int t)
+Token::Token(int t, string l)
 {
 	tag = t;
+	lexeme = l;
+}
+
+Token::Token(int t, int v) {
+	tag = t;
+	value = v;
+}
+Token::Token(int t, float f) {
+	tag = t;
+	dec_value = f;
 }
 
 void Token::print() {

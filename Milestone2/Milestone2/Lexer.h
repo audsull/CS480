@@ -1,6 +1,6 @@
 #pragma once
 #include "Word.h"
-#include "Real.h"
+#include "Dec.h"
 #include "Num.h"
 
 #include <cstdio>

@@ -7,6 +7,7 @@
 #include "Token.h"
 #include "Word.h"
 #include "Num.h"
+#include "Dec.h"
 #include "Lexer.h"
 #include "Parser.h"
 
@@ -19,6 +20,7 @@ int main() {
 	//t = parse.getToken();
 	//parse.doLex();
 	
+	/*
 	int test = 0;
 	while (test != Tag::END) {
 		test = parse.T();
@@ -27,9 +29,9 @@ int main() {
 	cout << "Finished";
 
 	parse.result();
+	*/
 
-
-
+	int test = 0;
 	/*
 	while (test != 299) {
 		test = parse.testToken();
@@ -38,6 +40,11 @@ int main() {
 	}
 	*/
 	//cout << t.tag;
+	while (t.tag != 299) {
+		//t = parse.testValue();
+		t = parse.T();
+		cout << "\n\n";
+	}	
 
 	getchar();
 	return 0;
