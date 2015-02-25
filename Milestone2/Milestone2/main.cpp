@@ -7,6 +7,7 @@
 #include "Token.h"
 #include "Lexer.h"
 #include "Parser.h"
+#include "SyntaxTree.h"
 
 using namespace std;
 class Token;
@@ -26,10 +27,9 @@ int main() {
 	cout << "Finished";
 
 	parse.result();
-	*/
 
 	int test = 0;
-	/*
+
 	while (test != 299) {
 		test = parse.testToken();
 		cout << test; 
@@ -37,12 +37,17 @@ int main() {
 	}
 	*/
 	//cout << t.tag;
-	while (t.tag != 299) {
-		//t = parse.testValue();
+
+	/*while (t.tag != 299) {
+		t = parse.testValue();
 		t = parse.T();
 		cout << "\n\n";
-	}	
+	}*/	
 
+	SyntaxTree tree;
+	while (t.tag != 299) {
+		t = tree.T_syntax();
+	}
 	getchar();
 	return 0;
 }

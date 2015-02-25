@@ -14,16 +14,16 @@
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="SyntaxTree.cpp" />
     <ClCompile Include="Tag.cpp" />
     <ClCompile Include="Token.cpp" />
-    <ClCompile Include="Tree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Parser.h" />
+    <ClInclude Include="SyntaxTree.h" />
     <ClInclude Include="Tag.h" />
     <ClInclude Include="Token.h" />
-    <ClInclude Include="Tree.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="testfile.txt" />
