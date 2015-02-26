@@ -54,4 +54,7 @@
   <ItemGroup>
     <Text Include="testfile.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="output.fs" />
+  </ItemGroup>
 </Project>

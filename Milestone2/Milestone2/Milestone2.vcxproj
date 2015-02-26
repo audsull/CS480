@@ -28,6 +28,9 @@
   <ItemGroup>
     <Text Include="testfile.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="output.fs" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{88B90618-776A-409E-8023-FD3FE3F17831}</ProjectGuid>
     <RootNamespace>Milestone2</RootNamespace>

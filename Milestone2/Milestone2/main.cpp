@@ -3,6 +3,7 @@
 #include <string>
 #include <cstdio>
 #include <vector>
+#include <string>
 #include "Tag.h"
 #include "Token.h"
 #include "Lexer.h"
@@ -12,7 +13,15 @@
 using namespace std;
 class Token;
 
+
 int main() {
+	ofstream outfile;
+	outfile.open("output.txt");
+	if (outfile.is_open())
+		outfile << "Test";
+	outfile.close();
+
+
 	Token t;
 	Parser parse;
 	//t = parse.getToken();
@@ -24,8 +33,6 @@ int main() {
 		test = parse.T();
 		cout << "\n\n";
 	}
-	cout << "Finished";
-
 	parse.result();
 
 	int test = 0;
@@ -36,7 +43,6 @@ int main() {
 		cout << "\n";
 	}
 	*/
-	//cout << t.tag;
 
 	/*while (t.tag != 299) {
 		t = parse.testValue();
@@ -46,8 +52,11 @@ int main() {
 
 	SyntaxTree tree;
 	while (t.tag != 299) {
-		t = tree.T_syntax();
+		t = tree.T_syntax(outfile);
 	}
+
+
+
 	getchar();
 	return 0;
 }
