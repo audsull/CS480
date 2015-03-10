@@ -1,5 +1,9 @@
 #include "SyntaxTree.h"
 
+std::map<std::string, int> varInts;
+std::map<std::string, float> varFloats;
+std::map <std::string, std::string> varStrings;
+std::map <std::string, bool> varBools;
 
 SyntaxTree::SyntaxTree()
 {
@@ -173,18 +177,31 @@ bool SyntaxTree::oper_syntax(ofstream& outfile) {
 			cur = SyntaxTree::getToken_syntax();
 
 			status = SyntaxTree::ids_syntax(outfile);
-
+			//cout << "trying to store " << next.lexeme << endl;
+			string curid = next.lexeme;
 
 			cur = SyntaxTree::getToken_syntax();
-			cout << "trying to store " << next.tag << endl;
+			//cout << "trying to store " << next.value << endl;
+			
 
 			
 			Token var = cur; //var is the id
 			string excla = " !";
-
+			if (next.tag == Tag::INTTYPE) {
+				varInts[curid] = next.value;
+			}
 			if (next.tag == Tag::REALTYPE) {
 				excla = " f!";
+				varFloats[curid] = next.dec_value;
+
 			}
+			if (next.tag == Tag::STRINGTYPE) {
+				varStrings[curid] = next.lexeme;
+			}
+
+			//cout << varInts[curid] << endl;
+			//cout << varFloats[curid] << endl;
+			//cout << varStrings[curid] << endl;
 
 			//cout << "variable " << var.lexeme << "\n";
 
