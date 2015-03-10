@@ -14,6 +14,11 @@ public:
 	int value;
 	float dec_value;
 
+	int storedInt;
+	float storedFloat;
+	string storedString;
+	bool storedBool;
+
 	Token();
 	Token(int, string);
 	Token(int, int);
