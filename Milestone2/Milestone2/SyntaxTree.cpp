@@ -6,39 +6,30 @@ std::map <std::string, std::string> varStrings;
 std::map <std::string, bool> varBools;
 
 SyntaxTree::SyntaxTree()
-{
-	
-}
+{}
 
 Token SyntaxTree::getToken_syntax() {
 	Lexer lex;
 	Token t;
-
 	t = lex.scan(os);
 	next = getNext_syntax();
-
 	return t;
 }
 Token SyntaxTree::getToken_syntax(bool &isReal, bool &isInt) {
 	Lexer lex;
 	Token t;
-
 	t = lex.scan(os);
 	next = getNext_syntax();
-
 	if (next.tag == Tag::REALTYPE || cur.tag == Tag::REALTYPE)
 		isReal = true;
-
 	if (next.tag == Tag::INTTYPE || cur.tag == Tag::INTTYPE)
 		isInt = true;
-
 	return t;
 }
 
 Token SyntaxTree::getNext_syntax() {
 	Lexer nextLex;
 	Token tnext;
-
 	tnext = nextLex.scan(nextos);
 	return tnext;
 }
@@ -66,27 +57,20 @@ void SyntaxTree::printVal_syntax(Token cur, ofstream& outfile) {
 		cout << cur.dec_value << "e ";
 		outfile << cur.dec_value << "e ";
 	}
-	if (cur.tag > 264 && cur.tag < 278 || cur.tag > 289 && cur.tag < 292) {
+	if (cur.tag > 264 && cur.tag < 278 || cur.tag > 289 && cur.tag < 293) {
 		cout << cur.lexeme << " ";
 		outfile << cur.lexeme << " ";
 	}
 }
 
-
-
-
-
 Token SyntaxTree::T_syntax(ofstream& outfile) {
 	pass = false;
-
 	next = SyntaxTree::getNext_syntax();
 	cur = SyntaxTree::getToken_syntax();
-
 	pass = SyntaxTree::S_syntax(outfile);
 	return cur;
 }
 bool SyntaxTree::S_syntax(ofstream& outfile) {
-	//cout << "[S]";
 	bool status = false;
 	if (next.tag == Tag::END) {
 		return false;
@@ -95,21 +79,17 @@ bool SyntaxTree::S_syntax(ofstream& outfile) {
 	case Tag::LPAR:
 		//()S1
 		if (next.tag == Tag::RPAR) {
-			//cout << "S->()S1\n";
-
 			status = SyntaxTree::S1_syntax(outfile);
 			return status;
 		}
 		//(S)S1
 		else {
-			//cout << "S->(S)S1\n";
 			if (next.tag == Tag::LPAR) {
 				cur = SyntaxTree::getToken_syntax();
 				status = SyntaxTree::S_syntax(outfile);
 				status = SyntaxTree::S1_syntax(outfile);
 			}
 			else {
-				//cout << "S->exprS1\n";
 				status = SyntaxTree::expr_syntax(outfile);
 				cur = SyntaxTree::getToken_syntax();
 				SyntaxTree::S1_syntax(outfile);
@@ -127,7 +107,6 @@ bool SyntaxTree::S_syntax(ofstream& outfile) {
 	case Tag::END:
 		return status;
 	default:
-		//cout << "\nS->exprS1\n";
 		status = SyntaxTree::expr_syntax(outfile);
 		cur = SyntaxTree::getToken_syntax();
 		status = SyntaxTree::S1_syntax(outfile);
@@ -137,10 +116,8 @@ bool SyntaxTree::S_syntax(ofstream& outfile) {
 }
 bool SyntaxTree::S1_syntax(ofstream& outfile) {
 	bool status = false;
-	//cout << "[S1]\n";
 
 	if (next.tag == Tag::END) {
-		//cout << "END";
 		return true;
 	}
 
@@ -152,7 +129,6 @@ bool SyntaxTree::S1_syntax(ofstream& outfile) {
 }
 
 bool SyntaxTree::expr_syntax(ofstream& outfile) {
-	//cout << "[EXPR]\n";
 	bool status = false;
 
 	//oper
@@ -164,26 +140,18 @@ bool SyntaxTree::expr_syntax(ofstream& outfile) {
 	return status;
 }
 bool SyntaxTree::oper_syntax(ofstream& outfile) {
-	//cout << "[OPER]\n";
 	bool status = false;
 
-	//cout << "cur: " << cur.tag << " next: " << next.tag << "\n";
-
+	//assign
 	if (cur.tag == Tag::LPAR) {
 		if (next.tag == Tag::ASSIGN) {
-			//cout << "[ASSIGN]\n";
-			//SyntaxTree::printVal_syntax(next);
 
 			cur = SyntaxTree::getToken_syntax();
 
 			status = SyntaxTree::ids_syntax(outfile);
-			//cout << "trying to store " << next.lexeme << endl;
 			string curid = next.lexeme;
 
 			cur = SyntaxTree::getToken_syntax();
-			//cout << "trying to store " << next.value << endl;
-			
-
 			
 			Token var = cur; //var is the id
 			string excla = " !";
@@ -203,8 +171,6 @@ bool SyntaxTree::oper_syntax(ofstream& outfile) {
 			//cout << varFloats[curid] << endl;
 			//cout << varStrings[curid] << endl;
 
-			//cout << "variable " << var.lexeme << "\n";
-
 			if (next.tag == Tag::LPAR) {
 				cur = SyntaxTree::getToken_syntax();
 			}
@@ -212,8 +178,6 @@ bool SyntaxTree::oper_syntax(ofstream& outfile) {
 
 
 			cur = SyntaxTree::getToken_syntax();
-
-
 
 			cout << " " << var.lexeme << excla << "\n";
 
@@ -224,34 +188,20 @@ bool SyntaxTree::oper_syntax(ofstream& outfile) {
 		}
 		//(binops oper oper)
 		if ((next.tag >= 265 && next.tag <= 276) || (next.tag == Tag::AND) || next.tag == Tag::OR) {
-			//cout << "(binops oper oper)\n";
-
-
 			Token b = next;
-			//cout << b.tag;
 
-			//cout << "cur: " << cur.tag << " next: " << next.tag << "\n";
 			if (b.tag == Tag::POW)
 				powop = true;
-			
-				
+							
 			status = SyntaxTree::binops_syntax(outfile);
-			//cout << cur.tag;
-			//cout << next.tag;
-			//if (cur.tag < 0) {
-				//cout << "negate ";
-				//return true;
-			//}
-			//cout << status;
+
 			if (!status) {
 				cout << "negate ";
 				return true;
 			}
-
 			if (next.tag == Tag::RPAR) {
 				status = true;
 			}
-
 			if (b.tag == Tag::MOD) {
 				cout << "mod ";
 			}
@@ -273,26 +223,19 @@ bool SyntaxTree::oper_syntax(ofstream& outfile) {
 			else
 				SyntaxTree::printVal_syntax(b, outfile);
 			
-			
-
-
 			return status;
 		}
 
 		if (next.tag == 261 || (next.tag >= 282 && next.tag <= 284)) {
-			//(unops oper)   
-			//int negate
+			//(unops oper) 
 			bool isReal = false;
 			bool isInt = false;
-
 
 			if (next.tag == Tag::LPAR) {
 				cur = SyntaxTree::getToken_syntax();
 			}
 
 			status = SyntaxTree::unops_syntax(outfile, isReal, isInt);
-			
-			
 
 			if (next.tag == Tag::RPAR) {
 				cur = SyntaxTree::getToken_syntax();
@@ -319,16 +262,11 @@ bool SyntaxTree::binops_syntax(ofstream& outfile) {
 	bool isReal = false;
 	bool isInt = false;
 
-	//cout << "\nisReal = " << isReal << " isInt = " << isInt << "\n";
-
-	//cout << "[BINOPS]\n";
-
 	cur = SyntaxTree::getToken_syntax(isReal, isInt);
 
 	if (next.tag == Tag::LPAR) {
 		cur = SyntaxTree::getToken_syntax(isReal, isInt);
 	}
-
 
 	status = SyntaxTree::oper_syntax(outfile); //oper1
 
@@ -336,12 +274,6 @@ bool SyntaxTree::binops_syntax(ofstream& outfile) {
 
 	if (powop)
 		cout << "s>f ";
-
-	//cout << "oper1good ";
-
-	//cout << "\nisReal = " << isReal << " isInt = " << isInt << "\n";
-
-	//cout << "status: " << status;
 
 	if (status) {
 		if (cur.tag != Tag::STRINGTYPE)
@@ -354,7 +286,6 @@ bool SyntaxTree::binops_syntax(ofstream& outfile) {
 		status = SyntaxTree::oper_syntax(outfile); //oper2
 		
 		if (!status)
-			//cout << "status: " << status;
 			return status;
 
 		if (powop)
@@ -364,7 +295,6 @@ bool SyntaxTree::binops_syntax(ofstream& outfile) {
 			cout << " s";
 
 		if (status) {
-
 			if (unopReal) {
 				cout << "f";
 				newReal = true;
@@ -393,25 +323,18 @@ bool SyntaxTree::binops_syntax(ofstream& outfile) {
 				newReal = true;
 				newMismatch = false;
 			}
-
-
-
 			cur = SyntaxTree::getToken_syntax(isReal, isInt);
 		}
 		else
 			return false;
 	}
-
 	return status;
 }
 bool SyntaxTree::unops_syntax(ofstream& outfile, bool& isReal, bool&isInt) {
-	//cout << "[UNOPS]\n";
 	bool status = false;
 
 	if (next.tag == Tag::MINUS || next.tag == Tag::NOT || next.tag == Tag::SIN || next.tag == Tag::COS || next.tag == Tag::TAN) {
 		status = true;
-
-
 		Token uo;
 		if (status)
 			uo = next;
@@ -422,11 +345,8 @@ bool SyntaxTree::unops_syntax(ofstream& outfile, bool& isReal, bool&isInt) {
 		}
 
 		status = SyntaxTree::oper_syntax(outfile);
-		
 		Token val = next;
 		cur = SyntaxTree::getToken_syntax(isReal, isInt);
-
-
 
 		if (uo.tag == Tag::SIN || uo.tag == Tag::COS || uo.tag == Tag::TAN) {
 			if (val.tag != Tag::REALTYPE) {
@@ -450,7 +370,6 @@ bool SyntaxTree::unops_syntax(ofstream& outfile, bool& isReal, bool&isInt) {
 	return status;
 }
 bool SyntaxTree::constants_syntax(ofstream& outfile) {
-	//cout << "[CONSTANTS]\n";
 	bool status = false;
 	//strings
 	switch (next.tag) {
@@ -469,27 +388,20 @@ bool SyntaxTree::constants_syntax(ofstream& outfile) {
 bool SyntaxTree::strings_syntax(ofstream& outfile) {
 	cur = SyntaxTree::getToken_syntax();
 	bool status = false;
-	
 	if (cur.tag == Tag::STRINGTYPE || cur.tag == Tag::TRUE || cur.tag == Tag::FALSE) {
-		//cout << "printingstring ";
 		SyntaxTree::printVal_syntax(cur, outfile);
 		status = true;
 	}
-
 	return status;
 }
 bool SyntaxTree::ids_syntax(ofstream& outfile) {
-	//cout << "\t\t\t[IDS]\n";
 	if (next.tag == Tag::ID) {
-		//SyntaxTree::printVal_syntax(next);
-		//cout << next.lexeme << endl;
 		variable = next;
 		return true;
 	}
 	return false;
 }
 bool SyntaxTree::ints_syntax(ofstream& outfile) {
-	//cout << "\t\t\t[INTS]\n";
 	if (next.tag == Tag::INTTYPE) {
 		SyntaxTree::printVal_syntax(next, outfile);
 		return true;
@@ -498,8 +410,6 @@ bool SyntaxTree::ints_syntax(ofstream& outfile) {
 }
 bool SyntaxTree::floats_syntax(ofstream& outfile) {
 	if (next.tag == Tag::REALTYPE) {
-		//cout << "f";
-		//initReal = true;
 		SyntaxTree::printVal_syntax(next, outfile);
 		return true;
 	}
@@ -523,7 +433,6 @@ bool SyntaxTree::stmts_syntax(ofstream& outfile) {
 	return status;
 }
 bool SyntaxTree::printstmts_syntax(ofstream& outfile) {
-	//cout << "[PRINTSTMTS]\n";
 	Token printy;
 	bool yesPrint = false;
 
@@ -533,7 +442,6 @@ bool SyntaxTree::printstmts_syntax(ofstream& outfile) {
 		if (cur.tag == Tag::STDOUT) {
 			printy = cur;
 			yesPrint = true;
-			//SyntaxTree::printVal_syntax(cur);
 			cur = SyntaxTree::getToken_syntax();
 
 		}
@@ -543,7 +451,6 @@ bool SyntaxTree::printstmts_syntax(ofstream& outfile) {
 		if (yesPrint)
 			cout << " TYPE";
 
-
 		if (cur.tag == Tag::RPAR) {
 			return true;
 		}
@@ -551,8 +458,6 @@ bool SyntaxTree::printstmts_syntax(ofstream& outfile) {
 	return false;
 }
 bool SyntaxTree::ifstmts_syntax(ofstream& outfile) {
-	//cout << "[IFSTMTS]\n";
-
 	if (cur.tag == Tag::LPAR && next.tag == Tag::IF) {
 		SyntaxTree::printVal_syntax(next, outfile);
 
@@ -565,7 +470,6 @@ bool SyntaxTree::ifstmts_syntax(ofstream& outfile) {
 
 		SyntaxTree::expr_syntax(outfile);
 		cur = SyntaxTree::getToken_syntax();
-
 
 		if (next.tag == Tag::RPAR) {
 			return true;
@@ -580,17 +484,14 @@ bool SyntaxTree::ifstmts_syntax(ofstream& outfile) {
 	return false;
 }
 bool SyntaxTree::whilestmts_syntax(ofstream& outfile) {
-	//cout << "\t\t\t[WHILESTMTS]\n";
 	if (cur.tag == Tag::LPAR && next.tag == Tag::WHILE) {
 		SyntaxTree::printVal_syntax(next, outfile);
-
 		cur = SyntaxTree::getToken_syntax();
 
 		if (next.tag == Tag::LPAR) {
 			cur = SyntaxTree::getToken_syntax();
 		}
 		SyntaxTree::expr_syntax(outfile);
-
 		SyntaxTree::exprlist_syntax(outfile);
 		if (next.tag == Tag::RPAR) {
 			return true;
@@ -599,7 +500,6 @@ bool SyntaxTree::whilestmts_syntax(ofstream& outfile) {
 	return false;
 }
 bool SyntaxTree::exprlist_syntax(ofstream& outfile) {
-	//cout << "[EXPRLIST]\n";
 	bool status = false;
 	status = expr_syntax(outfile);
 	if (!status)
@@ -607,33 +507,24 @@ bool SyntaxTree::exprlist_syntax(ofstream& outfile) {
 	return status;
 }
 bool SyntaxTree::letstmts_syntax(ofstream& outfile) {
-	//cout << "[LETSTMTS]\n";
 	bool status;
 
 	if (cur.tag == Tag::LPAR && next.tag == Tag::LET) {
-		//SyntaxTree::printVal_syntax(next, outfile);
-
 		cur = SyntaxTree::getToken_syntax();
 
 		if (next.tag == Tag::LPAR) {
-			//cur = SyntaxTree::getToken_syntax();
 			Token var = next;
-
 			status = SyntaxTree::varlist_syntax(outfile);
 
 			cout << "variable " << variable.lexeme << "\n";
 
-
 			if (status) {
 				cur = SyntaxTree::getToken_syntax();
-
-
 
 				if (next.tag == Tag::RPAR) {
 					//cur = Parser::getToken();
 				}
 			}
-
 			else {
 				return false;
 			}
@@ -643,18 +534,12 @@ bool SyntaxTree::letstmts_syntax(ofstream& outfile) {
 	return false;
 }
 bool SyntaxTree::varlist_syntax(ofstream& outfile) {
+	//cout << "in varlist";
 	bool status = false;
-	//cout << "[VARLIST]\n";
-
 	if (next.tag == Tag::LPAR) {
-		//cout << " in varlist ";
-
 		cur = SyntaxTree::getToken_syntax();
 		status = SyntaxTree::ids_syntax(outfile);
-
 		cur = SyntaxTree::getToken_syntax();
-
-		//cout << cur.lexeme;
 
 		if (!status) {
 			return false;
@@ -662,13 +547,14 @@ bool SyntaxTree::varlist_syntax(ofstream& outfile) {
 		status = SyntaxTree::type_syntax(outfile);
 		cur = SyntaxTree::getToken_syntax();
 
-		//cout << next.tag << endl;
+		if (next.tag == Tag::REALTYPE)
+			cout << "f";
+
+
+
 
 		if (next.tag == Tag::RPAR) {
-			
 			cur = SyntaxTree::getToken_syntax();
-			//cout << next.tag;
-
 			if (next.tag == Tag::RPAR) {
 				return true;
 			}
@@ -682,7 +568,6 @@ bool SyntaxTree::varlist_syntax(ofstream& outfile) {
 				}
 				return true;
 			}
-
 			return false;
 		}
 		return false;
@@ -690,9 +575,8 @@ bool SyntaxTree::varlist_syntax(ofstream& outfile) {
 	return false;
 }
 bool SyntaxTree::type_syntax(ofstream& outfile) {
-	//cout << "\t[TYPE]\n";
-	//SyntaxTree::printVal_syntax(next, outfile);
 	//cout << next.tag;
+
 	if (next.tag == Tag::REAL) {
 		cout << "f";
 	}
