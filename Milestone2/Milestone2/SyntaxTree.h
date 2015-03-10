@@ -27,6 +27,9 @@ public:
 	bool newInt = false;
 	bool newMismatch = false;
 	Token variable;
+	bool declared_real = false;
+	bool declared_int = false;
+	string excla = " !";
 
 	Token cur;
 	Token next;

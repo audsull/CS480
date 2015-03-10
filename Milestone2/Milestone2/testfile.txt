@@ -1,5 +1,5 @@
 (let (audrey int) )
-(:= audrey 1)
+(:= audrey 1.0)
 
-(let (x real) )
-(:= x 2.3)
+(let (x int) )
+(:= x 2)

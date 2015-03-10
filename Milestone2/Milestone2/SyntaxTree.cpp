@@ -146,6 +146,7 @@ bool SyntaxTree::oper_syntax(ofstream& outfile) {
 	if (cur.tag == Tag::LPAR) {
 		if (next.tag == Tag::ASSIGN) {
 
+
 			cur = SyntaxTree::getToken_syntax();
 
 			status = SyntaxTree::ids_syntax(outfile);
@@ -154,18 +155,21 @@ bool SyntaxTree::oper_syntax(ofstream& outfile) {
 			cur = SyntaxTree::getToken_syntax();
 			
 			Token var = cur; //var is the id
-			string excla = " !";
+			//string excla = " !";
+
+			//cout << next.tag << endl;
+
 			if (next.tag == Tag::INTTYPE) {
 				varInts[curid] = next.value;
 			}
 			if (next.tag == Tag::REALTYPE) {
-				excla = " f!";
 				varFloats[curid] = next.dec_value;
-
 			}
 			if (next.tag == Tag::STRINGTYPE) {
 				varStrings[curid] = next.lexeme;
 			}
+
+			//cout << declared_int << declared_real << endl;
 
 			//cout << varInts[curid] << endl;
 			//cout << varFloats[curid] << endl;
@@ -176,6 +180,10 @@ bool SyntaxTree::oper_syntax(ofstream& outfile) {
 			}
 			status = SyntaxTree::oper_syntax(outfile);
 
+			if (next.tag == Tag::REALTYPE) {
+				//cout << "real-type";
+				excla = " f!";
+			}
 
 			cur = SyntaxTree::getToken_syntax();
 
@@ -377,10 +385,10 @@ bool SyntaxTree::constants_syntax(ofstream& outfile) {
 		status = SyntaxTree::strings_syntax(outfile);
 		break;
 	case Tag::INTTYPE:
-		status = SyntaxTree::ints_syntax(outfile);
+			status = SyntaxTree::ints_syntax(outfile);
 		break;
 	case Tag::REALTYPE:
-		status = SyntaxTree::floats_syntax(outfile);
+			status = SyntaxTree::floats_syntax(outfile);
 		break;
 	}
 	return status;
@@ -403,14 +411,32 @@ bool SyntaxTree::ids_syntax(ofstream& outfile) {
 }
 bool SyntaxTree::ints_syntax(ofstream& outfile) {
 	if (next.tag == Tag::INTTYPE) {
-		SyntaxTree::printVal_syntax(next, outfile);
+		//cout << "here";
+		//cout << declared_real << endl;
+		if (declared_real) {
+			//cout << "declared real\n";
+			next.tag = Tag::REALTYPE;
+			next.dec_value = (float)next.value;
+			SyntaxTree::printVal_syntax(next, outfile);
+		}
+		else {
+			SyntaxTree::printVal_syntax(next, outfile);
+		}
 		return true;
 	}
 	return false;
 }
 bool SyntaxTree::floats_syntax(ofstream& outfile) {
 	if (next.tag == Tag::REALTYPE) {
-		SyntaxTree::printVal_syntax(next, outfile);
+		if (declared_int) {
+			//cout << "declared int\n";
+			next.tag = Tag::INTTYPE;
+			next.value = (int)next.dec_value;
+			SyntaxTree::printVal_syntax(next, outfile);
+		}
+		else {
+			SyntaxTree::printVal_syntax(next, outfile);
+		}
 		return true;
 	}
 	return false;
@@ -514,6 +540,7 @@ bool SyntaxTree::letstmts_syntax(ofstream& outfile) {
 
 		if (next.tag == Tag::LPAR) {
 			Token var = next;
+
 			status = SyntaxTree::varlist_syntax(outfile);
 
 			cout << "variable " << variable.lexeme << "\n";
@@ -579,6 +606,12 @@ bool SyntaxTree::type_syntax(ofstream& outfile) {
 
 	if (next.tag == Tag::REAL) {
 		cout << "f";
+		declared_real = true;
+		declared_int = false;
+	}
+	else {
+		declared_real = false;
+		declared_int = true;
 	}
 	return true;
 }
