@@ -511,15 +511,27 @@ bool SyntaxTree::ifstmts_syntax(ofstream& outfile) {
 }
 bool SyntaxTree::whilestmts_syntax(ofstream& outfile) {
 	if (cur.tag == Tag::LPAR && next.tag == Tag::WHILE) {
-		SyntaxTree::printVal_syntax(next, outfile);
+		cout << " : " << funct << fn << " begin ";
+		fn++;
+
+		//SyntaxTree::printVal_syntax(next, outfile);
+		
 		cur = SyntaxTree::getToken_syntax();
 
 		if (next.tag == Tag::LPAR) {
 			cur = SyntaxTree::getToken_syntax();
 		}
+
 		SyntaxTree::expr_syntax(outfile);
+		cur = SyntaxTree::getToken_syntax();
+		cur = SyntaxTree::getToken_syntax();
+
+		cout << " while ";
+
 		SyntaxTree::exprlist_syntax(outfile);
+
 		if (next.tag == Tag::RPAR) {
+			cout << " repeat ; ";
 			return true;
 		}
 	}
@@ -530,6 +542,7 @@ bool SyntaxTree::exprlist_syntax(ofstream& outfile) {
 	status = expr_syntax(outfile);
 	if (!status)
 		expr_syntax(outfile);
+
 	return status;
 }
 bool SyntaxTree::letstmts_syntax(ofstream& outfile) {

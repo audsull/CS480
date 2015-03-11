@@ -1,5 +1,1 @@
-(let (audrey int) )
-(:= audrey 1.0)
-
-(let (x int) )
-(:= x 2)
+(while (< 2 3) (stdout("cool")))

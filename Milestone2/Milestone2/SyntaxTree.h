@@ -17,6 +17,9 @@ class SyntaxTree
 public:
 	SyntaxTree();
 
+	string funct = "funct";
+	int fn = 0;
+
 	int os = 0;
 	int nextos = 0;
 	int lvl = 0;
