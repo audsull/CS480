@@ -485,8 +485,8 @@ bool SyntaxTree::printstmts_syntax(ofstream& outfile) {
 }
 bool SyntaxTree::ifstmts_syntax(ofstream& outfile) {
 	if (cur.tag == Tag::LPAR && next.tag == Tag::IF) {
-
-		cout << " : " << funct << fn << " ";
+		string curf = funct + to_string(fn);
+		cout << " : " << curf << " ";
 		fn++;
 
 		//SyntaxTree::printVal_syntax(next, outfile);
@@ -504,7 +504,7 @@ bool SyntaxTree::ifstmts_syntax(ofstream& outfile) {
 		SyntaxTree::expr_syntax(outfile);
 		cur = SyntaxTree::getToken_syntax();
 
-		cout << " then ; ";
+		cout << " then ; "<< curf;
 
 		if (next.tag == Tag::RPAR) {
 			return true;
@@ -520,7 +520,8 @@ bool SyntaxTree::ifstmts_syntax(ofstream& outfile) {
 }
 bool SyntaxTree::whilestmts_syntax(ofstream& outfile) {
 	if (cur.tag == Tag::LPAR && next.tag == Tag::WHILE) {
-		cout << " : " << funct << fn << " begin ";
+		string curf = funct + to_string(fn);
+		cout << " : " << curf << " begin ";
 		fn++;
 
 		//SyntaxTree::printVal_syntax(next, outfile);
@@ -540,7 +541,7 @@ bool SyntaxTree::whilestmts_syntax(ofstream& outfile) {
 		SyntaxTree::exprlist_syntax(outfile);
 
 		if (next.tag == Tag::RPAR) {
-			cout << " repeat ; ";
+			cout << " repeat ; " << curf;
 			return true;
 		}
 	}
