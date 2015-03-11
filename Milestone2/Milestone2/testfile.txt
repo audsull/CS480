@@ -1,1 +1,1 @@
-(while (< 2 3) (stdout("cool")))
+(if (< 1 2) (stdout("hi")))

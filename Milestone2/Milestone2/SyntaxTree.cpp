@@ -485,7 +485,11 @@ bool SyntaxTree::printstmts_syntax(ofstream& outfile) {
 }
 bool SyntaxTree::ifstmts_syntax(ofstream& outfile) {
 	if (cur.tag == Tag::LPAR && next.tag == Tag::IF) {
-		SyntaxTree::printVal_syntax(next, outfile);
+
+		cout << " : " << funct << fn << " ";
+		fn++;
+
+		//SyntaxTree::printVal_syntax(next, outfile);
 
 		cur = SyntaxTree::getToken_syntax();
 		if (next.tag == Tag::LPAR) {
@@ -493,9 +497,14 @@ bool SyntaxTree::ifstmts_syntax(ofstream& outfile) {
 		}
 		SyntaxTree::expr_syntax(outfile);
 		cur = SyntaxTree::getToken_syntax();
+		cur = SyntaxTree::getToken_syntax();
+
+		cout << " if ";
 
 		SyntaxTree::expr_syntax(outfile);
 		cur = SyntaxTree::getToken_syntax();
+
+		cout << " then ; ";
 
 		if (next.tag == Tag::RPAR) {
 			return true;
