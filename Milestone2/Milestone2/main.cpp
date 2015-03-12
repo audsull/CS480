@@ -55,8 +55,6 @@ int main() {
 		t = tree.T_syntax(outfile);
 	}
 
-
-
 	getchar();
 	return 0;
 }

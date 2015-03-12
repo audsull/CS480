@@ -34,6 +34,12 @@ public:
 	bool declared_int = false;
 	string excla = " !";
 
+	bool rflag = 0;
+	bool iflag = 0;
+	bool sflag = 0;
+
+	Token stored;
+
 	Token cur;
 	Token next;
 	bool pass;
