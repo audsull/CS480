@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <list>
 
 using namespace std;
 
@@ -37,6 +38,8 @@ public:
 	bool rflag = 0;
 	bool iflag = 0;
 	bool sflag = 0;
+
+	bool isThere = 0;
 
 	Token stored;
 

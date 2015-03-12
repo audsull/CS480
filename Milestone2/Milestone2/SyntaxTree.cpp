@@ -5,8 +5,14 @@ std::map<std::string, float> varFloats;
 std::map <std::string, std::string> varStrings;
 std::map <std::string, bool> varBools;
 
+std::list<std::string> initialized_ids;
+std::list<std::string>::const_iterator it;
+
+
 SyntaxTree::SyntaxTree()
-{}
+{
+
+}
 
 Token SyntaxTree::getToken_syntax() {
 	Lexer lex;
@@ -151,6 +157,22 @@ bool SyntaxTree::oper_syntax(ofstream& outfile) {
 			cur = SyntaxTree::getToken_syntax();
 			status = SyntaxTree::ids_syntax(outfile);
 			string curid = next.lexeme;
+			//cout <<  " next lex is " << next.lexeme << endl;
+			//check all the vars to find if they have been declared.
+			for (it = initialized_ids.begin(); it != initialized_ids.end(); ++it)  {
+				if (curid.compare(initialized_ids.front()) == 0)
+					//cout << "yes";
+					isThere = 1;
+				else {
+					isThere = 0;
+				}
+			}
+			if (isThere == 0) {
+				cout << "VARIABLE UNDECLARED\n";
+				getchar();
+			}
+
+
 
 			cur = SyntaxTree::getToken_syntax();
 			
@@ -160,15 +182,7 @@ bool SyntaxTree::oper_syntax(ofstream& outfile) {
 
 
 			//should this be in the let section??
-			if (next.tag == Tag::INTTYPE) {
-				varInts[curid] = next.value;
-			}
-			if (next.tag == Tag::REALTYPE) {
-				varFloats[curid] = next.dec_value;
-			}
-			if (next.tag == Tag::STRINGTYPE) {
-				varStrings[curid] = next.lexeme;
-			}
+
 
 			//cout << declared_int << declared_real << endl;
 
@@ -288,6 +302,20 @@ bool SyntaxTree::binops_syntax(ofstream& outfile) {
 	if (next.tag == Tag::ID) {
 		cout << next.lexeme << " ";
 		stored = next;
+
+		for (it = initialized_ids.begin(); it != initialized_ids.end(); ++it)  {
+			if ((next.lexeme).compare(initialized_ids.front()) == 0)
+				//cout << "yes";
+				isThere = 1;
+			else {
+				isThere = 0;
+			}
+		}
+		if (isThere == 0) {
+			cout << "VARIABLE UNDECLARED\n";
+			getchar();
+		}
+
 		//cur = SyntaxTree::getToken_syntax(isReal, isInt);
 	}
 	//cout << cur.value;
@@ -310,6 +338,20 @@ bool SyntaxTree::binops_syntax(ofstream& outfile) {
 		if (next.tag == Tag::ID) {
 			cout << next.lexeme << " ";
 			stored = next;
+
+			for (it = initialized_ids.begin(); it != initialized_ids.end(); ++it)  {
+				if ((next.lexeme).compare(initialized_ids.front()) == 0)
+					//cout << "yes";
+					isThere = 1;
+				else {
+					isThere = 0;
+				}
+			}
+			if (isThere == 0) {
+				cout << "VARIABLE UNDECLARED\n";
+				getchar();
+			}
+
 			cur = SyntaxTree::getToken_syntax();
 		}
 		if (!status)
@@ -618,6 +660,11 @@ bool SyntaxTree::letstmts_syntax(ofstream& outfile) {
 				status = SyntaxTree::varlist_syntax(outfile);
 
 				cout << "variable " << variable.lexeme << "\n";
+				string curid = variable.lexeme;
+
+
+				//add ids to list to find whether they have been declared later.
+				initialized_ids.push_front(curid);
 
 				if (status) {
 					cur = SyntaxTree::getToken_syntax();
