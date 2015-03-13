@@ -180,10 +180,6 @@ bool SyntaxTree::oper_syntax(ofstream& outfile) {
 			//string excla = " !"; 
 			//cout << next.tag << endl;
 
-
-			//should this be in the let section??
-
-
 			//cout << declared_int << declared_real << endl;
 
 			//cout << varInts[curid] << endl;
@@ -203,6 +199,8 @@ bool SyntaxTree::oper_syntax(ofstream& outfile) {
 			cur = SyntaxTree::getToken_syntax();
 
 			cout << " " << var.lexeme << excla << "\n";
+
+			excla = " !";
 
 			if (next.tag == Tag::RPAR) {
 				cur = SyntaxTree::getToken_syntax();
@@ -729,12 +727,12 @@ bool SyntaxTree::type_syntax(ofstream& outfile) {
 
 	if (next.tag == Tag::REAL) {
 		cout << "f";
-		//declared_real = true;
-		//declared_int = false;
+		declared_real = true;
+		declared_int = false;
 	}
 	else {
-		//declared_real = false;
-		//declared_int = true;
+		declared_real = false;
+		declared_int = true;
 	}
 	return true;
 }

@@ -1,3 +1,5 @@
+(let ((i int)))
+(:= i 2)
 
 ( (let ((x int))) (:= x 10) (stdout (- 20 x))
 (if (> x 3) (stdout "yes"))
@@ -5,3 +7,17 @@
 (while (> x 5) (stdout "hello") (:= x (- x 1))) )
 
 (:= y 4)
+
+
+(let ((a real)))
+(:= a 1.1)
+
+(let ((c int)))
+(:= c 2)
+
+(let ((b real)))
+(:= b 3)
+
+(let ((d int)))
+(:= d 4.3475)
+
